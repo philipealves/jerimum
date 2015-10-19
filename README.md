@@ -1,2 +1,2 @@
 # jerimum
-Java Framework for application development.
+Framework for Java application development.
