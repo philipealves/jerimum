@@ -25,6 +25,8 @@ import br.com.jerimum.fw.logging.LoggerUtils;
 @Scope("session")
 public class LoginController implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * Returns the logged username.
 	 * 
