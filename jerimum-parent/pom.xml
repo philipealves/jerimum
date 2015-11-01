@@ -4,22 +4,34 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.com.jerimum</groupId>
 	<artifactId>jerimum-parent</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Jerimum Framework</name>
 	<description>Framework for Java application development.</description>
 	
-	<parent>
-	    <groupId>org.springframework.boot</groupId>
-	    <artifactId>spring-boot-starter-parent</artifactId>
-	    <version>1.2.5.RELEASE</version>
-	</parent>
-	
 	<modules>
 		<module>jerimum-framework</module>
 		<module>jerimum-archetype-web</module>
+		<module>jerimum-archetype-web-angularjs</module>
 	</modules>
-	
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-framework-bom</artifactId>
+				<version>${spring.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	
 	<properties>
 	
@@ -33,6 +45,11 @@
   		
   		<!-- spring -->
 		<spring.data.version>Gosling-RELEASE</spring.data.version>
+		<spring.version>4.2.2.RELEASE</spring.version>
+		<spring.security.version>4.0.3.RELEASE</spring.security.version>
+		
+		<!-- aspectj -->
+		<aspectj.version>1.8.7</aspectj.version>
 		
 		<!-- apache -->
 		<apache.commons.lang.version>3.4</apache.commons.lang.version>
@@ -40,6 +57,11 @@
 		<!-- google -->
 		<google.guava.version>18.0</google.guava.version>  		
 		
+		<!-- javaee -->
+		<servlet.api.version>3.1.0</servlet.api.version>
+		
+		<!-- Web Resource Optimizer for Java -->
+		<wro4j.version>1.7.6</wro4j.version>
 		
 		<scala.library.version>2.10.4</scala.library.version>
 	
@@ -48,66 +70,77 @@
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.archetype.packaging>2.4</maven.archetype.packaging>
-		<maven.maven.archetype.plugin>2.4</maven.maven.archetype.plugin>
+		<maven.archetype.plugin>2.4</maven.archetype.plugin>
 		
 	</properties>
 	
 	
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.data</groupId>
-				<artifactId>spring-data-releasetrain</artifactId>
-				<version>${spring.data.version}</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-	
-	
-	
-	
-	<!-- deploy artifacts into this repo -->
-	<distributionManagement>
-		<repository>
-			<id>nexus</id>
-			<name>Repositorio de Releases</name>
-			<url>http://172.16.140.67:8081/nexus/content/repositories/releases/</url>
-		</repository>
-		<snapshotRepository>
-			<id>nexus</id>
-			<name>Repositorios de Snapshots</name>
-			<url>http://172.16.140.132:8081/nexus/content/repositories/snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
-
 	<!-- download artifacts from this repo -->
 	<repositories>
+		<!--<repository>-->
+			<!--<id>nexus</id>-->
+			<!--<name>nexus</name>-->
+			<!--<url>http://localhost:8081/nexus/content/groups/public/</url>-->
+			<!--<releases>-->
+				<!--<enabled>true</enabled>-->
+			<!--</releases>-->
+			<!--<snapshots>-->
+				<!--<enabled>true</enabled>-->
+			<!--</snapshots>-->
+		<!--</repository>-->
 		<repository>
-			<id>nexus</id>
-			<name>nexus</name>
-			<url>http://172.16.140.132:8081/nexus/content/groups/public/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>http://repo.spring.io/snapshot</url>
 			<snapshots>
 				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>http://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
 			</snapshots>
 		</repository>
 	</repositories>
 
 	<!-- download plugins from this repo -->
 	<pluginRepositories>
+		<!--<pluginRepository>-->
+			<!--<id>nexus</id>-->
+			<!--<name>nexus</name>-->
+			<!--<url>http://localhost:8081/nexus/content/groups/public/</url>-->
+			<!--<releases>-->
+				<!--<enabled>true</enabled>-->
+			<!--</releases>-->
+			<!--<snapshots>-->
+				<!--<enabled>true</enabled>-->
+			<!--</snapshots>-->
+		<!--</pluginRepository>-->
 		<pluginRepository>
-			<id>nexus</id>
-			<name>nexus</name>
-			<url>http://172.16.140.132:8081/nexus/content/groups/public/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>http://repo.spring.io/snapshot</url>
 			<snapshots>
 				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>http://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>spring-releases</id>
+			<name>Spring Releases</name>
+			<url>http://repo.spring.io/release</url>
+			<snapshots>
+				<enabled>false</enabled>
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
