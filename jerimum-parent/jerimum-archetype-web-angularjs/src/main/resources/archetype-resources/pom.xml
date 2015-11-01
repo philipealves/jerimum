@@ -1,0 +1,164 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>${groupId}</groupId>
+	<artifactId>${artifactId}</artifactId>
+	<version>${version}</version>
+	<packaging>war</packaging>
+
+	<name>${artifactId}-${version} - WAR</name>
+	<url>https://github.com/dalifreire/jerimum</url>
+
+	<parent>
+		<groupId>br.com.jerimum</groupId>
+		<artifactId>jerimum-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<properties>
+	
+		<!-- Web Resource Optimizer for Java -->
+		<wro4j.version>1.7.6</wro4j.version>
+		
+	</properties>
+	
+	<dependencies>
+	
+		<dependency>
+			<groupId>br.com.jerimum</groupId>
+			<artifactId>jerimum-framework</artifactId>
+			<version>${symbol_dollar}{jerimum.version}</version>
+		</dependency>
+	
+	</dependencies>
+	
+	<build>
+		<plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+            
+            <!-- Web Resource Optimizer for Java -->
+			<plugin>
+				<groupId>ro.isdc.wro4j</groupId>
+				<artifactId>wro4j-maven-plugin</artifactId>
+				<version>${symbol_dollar}{wro4j.version}</version>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<wroManagerFactory>ro.isdc.wro.maven.plugin.manager.factory.ConfigurableWroManagerFactory</wroManagerFactory>
+					<minimize>true</minimize>
+					<wroFile>${symbol_dollar}{basedir}/src/main/webapp/wro/wro.xml</wroFile>
+					<extraConfigFile>${symbol_dollar}{basedir}/src/main/webapp/wro/wro.properties</extraConfigFile>
+					<contextFolder>${symbol_dollar}{basedir}/src/main/webapp/wro,${symbol_dollar}{basedir}/src/main/webapp</contextFolder>
+      				<destinationFolder>${symbol_dollar}{basedir}/src/main/webapp/wro/</destinationFolder>
+					<cssDestinationFolder>${symbol_dollar}{basedir}/src/main/webapp/wro</cssDestinationFolder>
+					<jsDestinationFolder>${symbol_dollar}{basedir}/src/main/webapp/wro</jsDestinationFolder>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.webjars</groupId>
+						<artifactId>jquery</artifactId>
+						<version>2.1.1</version>
+					</dependency>
+					<dependency>
+						<groupId>org.webjars</groupId>
+						<artifactId>angularjs</artifactId>
+						<version>1.3.8</version>
+					</dependency>
+					<dependency>
+						<groupId>org.webjars</groupId>
+						<artifactId>bootstrap</artifactId>
+						<version>3.2.0</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+	
+	
+	<!-- download artifacts from this repo -->
+	<repositories>
+		<!--<repository>-->
+			<!--<id>nexus</id>-->
+			<!--<name>nexus</name>-->
+			<!--<url>http://localhost:8081/nexus/content/groups/public/</url>-->
+			<!--<releases>-->
+				<!--<enabled>true</enabled>-->
+			<!--</releases>-->
+			<!--<snapshots>-->
+				<!--<enabled>true</enabled>-->
+			<!--</snapshots>-->
+		<!--</repository>-->
+		<repository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>http://repo.spring.io/snapshot</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>http://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<!-- download plugins from this repo -->
+	<pluginRepositories>
+		<!--<pluginRepository>-->
+			<!--<id>nexus</id>-->
+			<!--<name>nexus</name>-->
+			<!--<url>http://localhost:8081/nexus/content/groups/public/</url>-->
+			<!--<releases>-->
+				<!--<enabled>true</enabled>-->
+			<!--</releases>-->
+			<!--<snapshots>-->
+				<!--<enabled>true</enabled>-->
+			<!--</snapshots>-->
+		<!--</pluginRepository>-->
+		<pluginRepository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>http://repo.spring.io/snapshot</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>http://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>spring-releases</id>
+			<name>Spring Releases</name>
+			<url>http://repo.spring.io/release</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+			
+</project>
