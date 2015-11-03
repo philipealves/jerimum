@@ -8,10 +8,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * Hello World sample controller.
  * 
  * @author Dali Freire: dalifreire@gmail.com
  * @since 10/2015
@@ -28,8 +31,18 @@ public class HelloWorldController {
 	public Map<String, Object> home() {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("id", UUID.randomUUID().toString());
-		model.put("content", "Hello World");
+		model.put("content", String.format("Hello World '%s'!", getLoggedUsername()));
 		return model;
+	}
+
+	/**
+	 * Returns the logged username.
+	 * 
+	 * @return {@link String}
+	 */
+	private String getLoggedUsername() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return (auth != null ? auth.getName() : null);
 	}
 	
 }
