@@ -11,6 +11,7 @@ import br.com.jerimum.fw.auth.JerimumDefaultSecurityConfiguration;
 import ${package}.util.NavigationConstants;
 
 /**
+ * Security configuration for the application.
  * 
  * @author Dali Freire - dalifreire@gmail.com
  * @since 10/2015

@@ -16,10 +16,52 @@ import br.com.jerimum.fw.logging.LoggerUtils;
  * @author Dali Freire - dalifreire@gmail.com
  * @since 10/2015
  */
-public class AspectLog {
+public class JerimumAspectLog {
 
     private static int sequence = 1;
 
+    /**
+     * 
+     * @param jp
+     * @throws Exception
+     */
+    protected void logEntry(JoinPoint jp) throws Exception {
+
+        Logger logger = JerimumAspectUtils.getLogger(jp);
+        if (logger.isDebugEnabled()) {
+        	
+            StringBuilder sb = new StringBuilder();
+            sb.append("Entry --> ");
+            sb.append(JerimumAspectUtils.methodName(jp));
+            sb.append('(');
+            JerimumAspectUtils.appendArguments(jp.getArgs(), sb);
+            sb.append(')');
+            LoggerUtils.logDebug(logger, sb.toString());
+        }
+    }
+
+    /**
+     * 
+     * @param jp
+     * @throws Exception
+     */
+    protected void logExit(JoinPoint jp) throws Exception {
+
+        Logger logger = JerimumAspectUtils.getLogger(jp);
+        LoggerUtils.logDebug(logger, "Exit <-- " + JerimumAspectUtils.methodName(jp) + " - void");
+    }
+
+    /**
+     * 
+     * @param jp
+     * @param returningValue
+     * @throws Exception
+     */
+    protected void logExit(JoinPoint jp, Object returningValue) throws Exception {
+
+        Logger logger = JerimumAspectUtils.getLogger(jp);
+        LoggerUtils.logDebug(logger, "Exit <-- " + JerimumAspectUtils.methodName(jp) + " - " + JerimumAspectUtils.displayObject(returningValue));
+    }
 
     /**
      * 
@@ -27,13 +69,12 @@ public class AspectLog {
      * @param ex
      * @throws Throwable
      */
-//    @AfterThrowing(pointcut = "br.com.scopus.fw.aop.FrameworkPointcuts.businessServiceImpl() || br.com.scopus.fw.aop.FrameworkPointcuts.businessServiceImplUnipass()", throwing = "ex", argNames = "jp,ex")
-    public void catchException(JoinPoint jp, Throwable ex) throws Throwable {
+    protected void logException(JoinPoint jp, Throwable ex) throws Throwable {
 
         String occurrenceId = nextOccurrenceId();
-        String methodName = AspectUtils.methodName(jp);
+        String methodName = JerimumAspectUtils.methodName(jp);
 
-        Logger logger = AspectUtils.getLogger(jp);
+        Logger logger = JerimumAspectUtils.getLogger(jp);
         LoggerUtils.logError(logger, "Exit <-- {} - EXCEPTION [{}] {}", methodName, occurrenceId, ex.getMessage());
 
         if (logger.isErrorEnabled()) {
@@ -65,10 +106,10 @@ public class AspectLog {
      * @param appendRootCause
      * @param logger
      */
-    private void dumpException(JerimumException fex, boolean appendRootCause, Logger logger) {
+    protected void dumpException(JerimumException fex, boolean appendRootCause, Logger logger) {
 
         StringBuilder args = new StringBuilder();
-        AspectUtils.appendArguments(fex.getArgs(), args);
+        JerimumAspectUtils.appendArguments(fex.getArgs(), args);
         
         StringBuilder dump = new StringBuilder();
         dump.append("# Identificador do erro: {} \n");
@@ -97,7 +138,7 @@ public class AspectLog {
      * @param cause
      * @return {@link String}
      */
-    private String getRootCause(Throwable cause) {
+    protected String getRootCause(Throwable cause) {
 
         if (cause instanceof ValidationException) {
 
@@ -122,7 +163,7 @@ public class AspectLog {
      * 
      * @return {@link String}
      */
-    private static synchronized String nextOccurrenceId() {
+    protected static synchronized String nextOccurrenceId() {
         return String.valueOf(++sequence);
     }
     
