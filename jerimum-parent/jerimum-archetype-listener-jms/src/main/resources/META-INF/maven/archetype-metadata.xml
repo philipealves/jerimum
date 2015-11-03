@@ -1,0 +1,54 @@
+<archetype-descriptor xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd"
+					  xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0" 
+					  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+					  name="jerimum-archetype-web">
+
+	<fileSets>
+		<!-- main packages -->
+		<fileSet filtered="true" encoding="UTF-8" packaged="true">
+			<directory>src/main/java</directory>
+			<includes>
+				<include>**/**</include>
+			</includes>
+		</fileSet>		
+		<fileSet filtered="true" encoding="UTF-8">
+			<directory>src/main/resources</directory>
+			<includes>
+				<include>**/*</include>
+			</includes>
+		</fileSet>
+		
+		<!--  test packages -->
+		<fileSet filtered="true" encoding="UTF-8" packaged="true">
+			<directory>src/test/java</directory>
+			<includes>
+				<include>**/**</include>
+			</includes>
+		</fileSet>
+		<fileSet filtered="true" encoding="UTF-8" packaged="true">
+			<directory>src/test/resources</directory>
+			<includes>
+				<include>**/**</include>
+			</includes>
+		</fileSet>
+		
+		<!-- webapp -->
+		<fileSet filtered="true" encoding="UTF-8">
+			<directory>src/main/webapp</directory>
+			<includes>
+				<include>**/**</include>
+			</includes>
+		</fileSet>
+		
+		<fileSet encoding="UTF-8">
+			<directory></directory>
+			<includes>
+				<include>README</include>
+				<include>README.md</include>
+				<include>.gitignore</include>
+			</includes>
+		</fileSet>
+		
+	</fileSets>
+
+</archetype-descriptor>
