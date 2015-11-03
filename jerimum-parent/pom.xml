@@ -63,6 +63,9 @@
 		<!-- jamon -->
 		<jamon.version>2.81</jamon.version>
 		
+		<!-- jee/mensageria -->
+		<javaee.api.version>6.0</javaee.api.version>
+		
 		<!-- Web Resource Optimizer for Java -->
 		<wro4j.version>1.7.6</wro4j.version>
 		

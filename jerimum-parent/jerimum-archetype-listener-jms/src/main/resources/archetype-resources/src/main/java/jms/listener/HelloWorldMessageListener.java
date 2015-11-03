@@ -1,10 +1,7 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${package}.listener;
-
-import java.util.List;
-import java.util.Map;
+package ${package}.jms.listener;
 
 import javax.jms.BytesMessage;
 import javax.jms.Message;
@@ -22,8 +19,9 @@ import br.com.jerimum.fw.logging.LoggerUtils;
  * @since 11/2015
  */
 @Component
-public class HelloWorldJMSMessageListener implements MessageListener {
+public class HelloWorldMessageListener implements MessageListener {
 
+	@Override
     public void onMessage(Message message) {
 
         try {
@@ -31,24 +29,24 @@ public class HelloWorldJMSMessageListener implements MessageListener {
         	String correlationID = StringUtils.removeStartIgnoreCase(message.getJMSCorrelationID(), "ID:");
         	LoggerUtils.logDebug(this.getClass(), "New message received. CorrelationID: '{}'", correlationID);
 
-        	String message = null;
+        	String messageStr = null;
             if (message instanceof BytesMessage) {
 
                 BytesMessage bytesMessage = (BytesMessage) message;
                 byte[] body = new byte[(int) bytesMessage.getBodyLength()];
                 bytesMessage.readBytes(body);
-                message = new String(body);
+                messageStr = new String(body);
 
             } else {
                 TextMessage textMessage = (TextMessage) message;
-                message = textMessage.getText();
+                messageStr = textMessage.getText();
             }
             
             // TODO
-            LoggerUtils.logDebug(this.getClass(), "Message = '{}'", message);
+            LoggerUtils.logDebug(this.getClass(), "Message = '{}'", messageStr);
 
         } catch (Exception e) {
-            LoggerUtils.logError(this.getClass(), e);
+            LoggerUtils.logError(this.getClass(), "Unable to get jms message.", e);
         }
     }
 
