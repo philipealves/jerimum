@@ -19,6 +19,7 @@ public final class JerimumEnvironment {
     public static final String EXTERNAL_ENVIRONMENT_CONFIG = "jerimum.external.environment.config";
 
     private static final String FILE_PROTOCOL = "file:";
+    private static String environment;
 
     /**
      * Returns the value of the JVM property <i>jerimum.internal.environment.config</i>.
@@ -61,20 +62,43 @@ public final class JerimumEnvironment {
 
         try {
 
-        	String jerimumEnvironment = getExternalEnvironmentConfigValue();
-        	if (StringUtils.isBlank(jerimumEnvironment)) {
-        		jerimumEnvironment = getInternalEnvironmentConfigValue();
-        		if (StringUtils.isBlank(jerimumEnvironment)) {
-        			jerimumEnvironment = DEFAULT_ENVIRONMENT;
-                }
+        	if (StringUtils.isBlank(environment)) {
+        		
+	        	String jerimumEnvironment = getExternalEnvironmentConfigValue();
+	        	if (StringUtils.isBlank(jerimumEnvironment)) {
+	        		jerimumEnvironment = getInternalEnvironmentConfigValue();
+	        		if (StringUtils.isBlank(jerimumEnvironment)) {
+	        			jerimumEnvironment = DEFAULT_ENVIRONMENT;
+	                }
+	        	}
+	        	environment = jerimumEnvironment;
         	}
         	
-            return jerimumEnvironment;
+            return environment;
 
         } catch (SecurityException e) {
             LoggerUtils.logWarning(JerimumEnvironment.class, "Unable to read system property: \"" + INTERNAL_ENVIRONMENT_CONFIG + "\"", e);
             return DEFAULT_ENVIRONMENT;
         }
+    }
+    
+    /**
+     * Return <code>true</code> if it is a external environment.
+     * 
+     * @return boolean
+     */
+    public static boolean isExternalEnvironment() {
+    	return isExternalEnvironment(getEnvironment());
+    }
+
+    /**
+     * Return <code>true</code> if it is a external environment.
+     * 
+     * @param environment The environment name.
+     * @return boolean
+     */
+    public static boolean isExternalEnvironment(String environment) {
+    	return StringUtils.startsWith(environment, FILE_PROTOCOL);
     }
     
 }

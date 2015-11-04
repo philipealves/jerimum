@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+
+	<Resource name="jms/jmsConnectionFactory"
+		      auth="Container"
+		      type="com.ibm.mq.jms.MQQueueConnectionFactory"
+		      factory="com.ibm.mq.jms.MQQueueConnectionFactoryFactory"
+		      description="JMS Queue Connection Factory for sending messages"
+		      HOST="172.16.41.76"
+		      PORT="1414"
+		      TRAN="1"
+		      QMGR="QM.UNIPASS4I"/>
+   
+   <Resource name="jms/QUEUE.HELLO.WORLD.IN"
+      		 auth="Container"
+       		 type="com.ibm.mq.jms.MQQueue"
+      		 factory="com.ibm.mq.jms.MQQueueFactory"
+      		 description="JMS Queue for receiving messages from Dialog"
+      		 QU="QUEUE.HELLO.WORLD.IN"/>
+   
+   <Resource name="jms/QUEUE.HELLO.WORLD.OUT"
+      		 auth="Container"
+       		 type="com.ibm.mq.jms.MQQueue"
+      		 factory="com.ibm.mq.jms.MQQueueFactory"
+      		 description="JMS Queue for receiving messages from Dialog"
+      		 QU="QUEUE.HELLO.WORLD.OUT"/>   
+      
+</Context>

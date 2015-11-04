@@ -65,6 +65,18 @@
 			<artifactId>spring-security-config</artifactId>
 			<version>${spring.security.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jms</artifactId>
+		</dependency>
+		
+		<!-- jee/mensageria -->
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>${javaee.api.version}</version>
+			<scope>provided</scope>
+		</dependency>
 		
 		<!-- AOP -->
 		<dependency>

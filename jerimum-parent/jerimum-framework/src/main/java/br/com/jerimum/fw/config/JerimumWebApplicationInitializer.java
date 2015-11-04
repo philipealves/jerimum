@@ -38,16 +38,20 @@ public abstract class JerimumWebApplicationInitializer extends AbstractAnnotatio
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
 
-		String jerimumEnvironment = JerimumEnvironment.getEnvironment();
+		String jerimumEnvironmentPath = JerimumEnvironment.getEnvironment();
+		if (!JerimumEnvironment.isExternalEnvironment(jerimumEnvironmentPath)) {
+			jerimumEnvironmentPath = "classpath:META-INF/environment/" + jerimumEnvironmentPath + "/application.properties";
+		}
 
-		System.setProperty("spring.config.location", jerimumEnvironment + ",classpath:META-INF/environment/" + jerimumEnvironment + "/application.properties");
-		System.setProperty(AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME, jerimumEnvironment);
-		System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, jerimumEnvironment);
+		String jerimumEnvironmentName = JerimumEnvironment.getEnvironment();
+		System.setProperty("spring.config.location", jerimumEnvironmentPath);
+		System.setProperty(AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME, jerimumEnvironmentName);
+		System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, jerimumEnvironmentName);
 
 		LoggerUtils.logInfo(this.getClass(), "================================================================");
 		LoggerUtils.logInfo(this.getClass(), ".:  Starting Jerimum Application :.");
-		LoggerUtils.logInfo(this.getClass(), ".:  Application name:	{} :.", servletContext.getServletContextName());
-		LoggerUtils.logInfo(this.getClass(), ".:  Environment:	{} :.", jerimumEnvironment);
+		LoggerUtils.logInfo(this.getClass(), ".:  Application name: {} :.", servletContext.getServletContextName());
+		LoggerUtils.logInfo(this.getClass(), ".:  Environment: {} :.", jerimumEnvironmentName);
 
 		AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
 		context.register(getConfigurationClass());
