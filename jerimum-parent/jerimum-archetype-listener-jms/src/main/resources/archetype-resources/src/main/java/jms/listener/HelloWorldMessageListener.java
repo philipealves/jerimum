@@ -26,8 +26,9 @@ public class HelloWorldMessageListener implements MessageListener {
 
         try {
         
+        	String messageID = StringUtils.removeStartIgnoreCase(message.getJMSMessageID(), "ID:");
         	String correlationID = StringUtils.removeStartIgnoreCase(message.getJMSCorrelationID(), "ID:");
-        	LoggerUtils.logDebug(this.getClass(), "New message received. CorrelationID: '{}'", correlationID);
+        	LoggerUtils.logDebug(this.getClass(), "New message received. MessageID: '{}', CorrelationID: '{}'", messageID, correlationID);
 
         	String messageStr = null;
             if (message instanceof BytesMessage) {
@@ -49,5 +50,5 @@ public class HelloWorldMessageListener implements MessageListener {
             LoggerUtils.logError(this.getClass(), "Unable to get jms message.", e);
         }
     }
-
+	
 }

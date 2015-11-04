@@ -5,7 +5,7 @@ package ${package}.service.impl;
 
 import org.springframework.stereotype.Service;
 
-import br.com.jerimum.listenerjms.service.HelloWorldService;
+import ${package}.service.HelloWorldService;
 
 /**
  * 
