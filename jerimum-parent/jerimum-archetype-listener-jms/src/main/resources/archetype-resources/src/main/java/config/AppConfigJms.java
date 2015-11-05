@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class AppConfigJms implements Serializable {
 
 	private static final long serialVersionUID = 7896624401620243915L;
-	
+
 	@Value("${jms.connectionFactoryName}")
 	private String connectionFactoryName;
 	
@@ -35,6 +35,9 @@ public class AppConfigJms implements Serializable {
 	
 	@Value("${jms.responseQueueName}")
 	private String responseQueueName;
+	
+	@Value("${jms.listenerQueueName}")
+	private String listenerQueueName;
 	
 	@Value("${jms.timeout}")
 	private Long timeout;

@@ -7,6 +7,12 @@ import org.springframework.core.annotation.Order;
 
 import br.com.jerimum.fw.config.JerimumWebApplicationInitializer;
 
+/**
+ * Startup spring application class.
+ * 
+ * @author Dali Freire - dalifreire@gmail.com
+ * @since 10/2015
+ */
 @Order(1)
 public class ApplicationInitializer extends JerimumWebApplicationInitializer {
 
