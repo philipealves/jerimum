@@ -42,8 +42,6 @@ public class Application implements Serializable {
 	@Autowired
 	private AppConfig appConfig;
 
-	
-	
 	@Bean(name = "jmsConnectionFactory")
 	public ConnectionFactory connectionFactory() throws NamingException {
 
@@ -55,28 +53,43 @@ public class Application implements Serializable {
 	}
 	
 	@Bean(name = "requestQueue")
-	public Queue requestQueue() throws NamingException {
+	public Queue requestQueue() throws NamingException, JMSException {
 		
 		Context ctx = new InitialContext();
 		Queue requestQueue = (Queue) ctx.lookup(appConfig.getJms().getRequestQueueName());
-		LoggerUtils.logDebug(this.getClass(), "Looking up jms request queue: '{}' -> '{}'", appConfig.getJms().getRequestQueueName(), requestQueue);
+		LoggerUtils.logDebug(this.getClass(), "Looking up jms request queue: '{}' -> '{}'", appConfig.getJms().getRequestQueueName(), requestQueue.getQueueName());
 
 		return requestQueue;
 	}
 	
 	@Bean(name = "responseQueue")
-	public Queue responseQueue() throws NamingException {
+	public Queue responseQueue() throws NamingException, JMSException {
 		
 		Context ctx = new InitialContext();
 		Queue responseQueue = (Queue) ctx.lookup(appConfig.getJms().getResponseQueueName());
-		LoggerUtils.logDebug(this.getClass(), "Looking up jms response queue: '{}' -> '{}'", appConfig.getJms().getResponseQueueName(), responseQueue);
+		LoggerUtils.logDebug(this.getClass(), "Looking up jms response queue: '{}' -> '{}'", appConfig.getJms().getResponseQueueName(), responseQueue.getQueueName());
 		
 		return responseQueue;
 	}
 	
+	@Bean(name = "listenerQueue")
+	public Queue listenerQueue() throws NamingException, JMSException {
+		
+		Context ctx = new InitialContext();
+		Queue listenerQueue = (Queue) ctx.lookup(appConfig.getJms().getListenerQueueName());
+		LoggerUtils.logDebug(this.getClass(), "Looking up jms listener queue: '{}' -> '{}'", appConfig.getJms().getListenerQueueName(), listenerQueue.getQueueName());
+		
+		return listenerQueue;
+	}
+	
+	@Bean(name = "jmsTimeout")
+	public Long jmsTimeout() {
+		return Long.valueOf(appConfig.getJms().getTimeout());
+	}
+	
 	@Bean
 	@Autowired
-	public DefaultMessageListenerContainer helloWorldMessageListenerContainer(ConnectionFactory connectionFactory, @Qualifier("requestQueue") Queue destinationQueue, HelloWorldMessageListener messageListener) throws JMSException {
+	public DefaultMessageListenerContainer helloWorldMessageListenerContainer(ConnectionFactory connectionFactory, @Qualifier("listenerQueue") Queue destinationQueue, HelloWorldMessageListener messageListener) throws JMSException {
 
 		DefaultMessageListenerContainer listenerContainer = new DefaultMessageListenerContainer();
 		listenerContainer.setConnectionFactory(connectionFactory);
@@ -86,4 +99,5 @@ public class Application implements Serializable {
 		listenerContainer.setMaxConcurrentConsumers(appConfig.getJms().getMaxConcurrentConsumers().intValue());
 		return listenerContainer;
 	}
+	
 }

@@ -11,18 +11,25 @@
 		      TRAN="1"
 		      QMGR="QM.UNIPASS4I"/>
    
-   <Resource name="jms/QUEUE.HELLO.WORLD.IN"
+   <Resource name="jms/QUEUE.HELLO.WORLD.REQUEST"
       		 auth="Container"
        		 type="com.ibm.mq.jms.MQQueue"
       		 factory="com.ibm.mq.jms.MQQueueFactory"
-      		 description="JMS Queue for receiving messages from Dialog"
-      		 QU="QUEUE.HELLO.WORLD.IN"/>
+      		 description="JMS Queue for sending messages"
+      		 QU="QUEUE.HELLO.WORLD.REQUEST"/>
    
-   <Resource name="jms/QUEUE.HELLO.WORLD.OUT"
+   <Resource name="jms/QUEUE.HELLO.WORLD.RESPONSE"
       		 auth="Container"
        		 type="com.ibm.mq.jms.MQQueue"
       		 factory="com.ibm.mq.jms.MQQueueFactory"
-      		 description="JMS Queue for receiving messages from Dialog"
-      		 QU="QUEUE.HELLO.WORLD.OUT"/>   
+      		 description="JMS Queue for receiving messages"
+      		 QU="QUEUE.HELLO.WORLD.RESPONSE"/>   
+      		 
+   <Resource name="jms/QUEUE.HELLO.WORLD.LISTENER"
+      		 auth="Container"
+       		 type="com.ibm.mq.jms.MQQueue"
+      		 factory="com.ibm.mq.jms.MQQueueFactory"
+      		 description="JMS Queue for receiving messages"
+      		 QU="QUEUE.HELLO.WORLD.LISTENER"/>   
       
 </Context>

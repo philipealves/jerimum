@@ -9,17 +9,23 @@ import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.jerimum.fw.logging.LoggerUtils;
+import ${package}.service.HelloWorldService;
 
 /**
+ * Sample Hello World message listener.
  * 
  * @author Dali Freire: dalifreire@gmail.com
  * @since 11/2015
  */
 @Component
 public class HelloWorldMessageListener implements MessageListener {
+
+	@Autowired
+	private HelloWorldService helloWorldService;
 
 	@Override
     public void onMessage(Message message) {
@@ -43,8 +49,14 @@ public class HelloWorldMessageListener implements MessageListener {
                 messageStr = textMessage.getText();
             }
             
-            // TODO
-            LoggerUtils.logDebug(this.getClass(), "Message = '{}'", messageStr);
+            // SENDING A MESSAGE
+            helloWorldService.propagateReceivedMessage(messageStr);
+
+            // SENDING A MESSAGE AND GETTING THE RESPONSE
+            String requestMessage = "Are you there?";
+            LoggerUtils.logDebug(this.getClass(), "Sending new request message: ", requestMessage);
+            String response = helloWorldService.sendAndReceive(requestMessage);
+            LoggerUtils.logDebug(this.getClass(), "Received response: '{}'", response);
 
         } catch (Exception e) {
             LoggerUtils.logError(this.getClass(), "Unable to get jms message.", e);
