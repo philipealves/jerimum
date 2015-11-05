@@ -6,13 +6,11 @@ package ${package};
 import java.io.Serializable;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.jms.listener.DefaultMessageListenerContainer;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import ${package}.config.AppConfig;
 
