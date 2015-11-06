@@ -54,8 +54,8 @@ public class HelloWorldMessageListener implements MessageListener {
 
             // SENDING A MESSAGE AND GETTING THE RESPONSE
             String requestMessage = "Are you there?";
-            LoggerUtils.logDebug(this.getClass(), "Sending new request message: ", requestMessage);
             String response = helloWorldService.sendAndReceive(requestMessage);
+            
             LoggerUtils.logDebug(this.getClass(), "Received response: '{}'", response);
 
         } catch (Exception e) {

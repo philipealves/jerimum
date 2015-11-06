@@ -95,14 +95,19 @@
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
 		
 		<!-- jee/mensageria -->
-		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-			<version>${javaee.api.version}</version>
-			<scope>provided</scope>
-		</dependency>
+		<dependency>  
+		   <groupId>org.jboss.spec</groupId>  
+		   <artifactId>jboss-javaee-6.0</artifactId>  
+		   <version>${jboss.javaee.version}</version>  
+		   <type>pom</type>  
+		   <scope>provided</scope>  
+		</dependency>  
 		
 		<!-- AOP -->
 		<dependency>

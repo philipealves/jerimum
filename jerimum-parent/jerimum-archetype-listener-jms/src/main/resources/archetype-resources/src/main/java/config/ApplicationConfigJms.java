@@ -23,10 +23,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Component
-public class AppConfigJms implements Serializable {
+public class ApplicationConfigJms implements Serializable {
 
 	private static final long serialVersionUID = 7896624401620243915L;
-
+	
 	@Value("${jms.connectionFactoryName}")
 	private String connectionFactoryName;
 	
