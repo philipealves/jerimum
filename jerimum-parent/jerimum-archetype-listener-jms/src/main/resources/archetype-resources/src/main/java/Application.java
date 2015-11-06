@@ -12,18 +12,25 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.env.Environment;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import br.com.jerimum.fw.logging.LoggerUtils;
-import ${package}.config.AppConfig;
+import ${package}.config.ApplicationConfig;
 import ${package}.jms.listener.HelloWorldMessageListener;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Startup spring application class.
@@ -31,23 +38,47 @@ import ${package}.jms.listener.HelloWorldMessageListener;
  * @author Dali Freire - dalifreire@gmail.com
  * @since 10/2015
  */
+@Data
+@EqualsAndHashCode(callSuper = false)
 @EnableAsync
 @Configuration
 @ComponentScan
+@PropertySource({ "${spring.config.location}" })
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-public class Application implements Serializable {
+public class Application implements InitializingBean, Serializable {
 
 	private static final long serialVersionUID = 7271156509131604941L;
 
 	@Autowired
-	private AppConfig appConfig;
+	private Environment environment;
+	
+	@Autowired
+	private ApplicationConfig appConfig;
+	
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		String[] profiles = environment.getActiveProfiles();
+		if (profiles.length == 0) {
+			LoggerUtils.logInfo(this.getClass(), "Active Spring Profiles: None");
+		} else {
+			LoggerUtils.logInfo(this.getClass(), "Active Spring Profiles: {}", (Object[]) profiles);
+		}
+	}
+
+	@Bean
+	@Autowired
+	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer(Environment environment) {
+		PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
+		configurer.setEnvironment(environment);
+		return configurer;
+	}
 
 	@Bean(name = "jmsConnectionFactory")
 	public ConnectionFactory connectionFactory() throws NamingException {
 
 		Context ctx = new InitialContext();
-		ConnectionFactory jmsConnectionFactory = (ConnectionFactory) ctx.lookup(appConfig.getJms().getConnectionFactoryName());
-		LoggerUtils.logDebug(this.getClass(), "Looking up jms connection factory reference: '{}' -> '{}'", appConfig.getJms().getConnectionFactoryName(), jmsConnectionFactory);
+		ConnectionFactory jmsConnectionFactory = (ConnectionFactory) ctx.lookup(appConfig.getAppConfigJms().getConnectionFactoryName());
+		LoggerUtils.logDebug(this.getClass(), "Looking up jms connection factory reference: '{}' -> '{}'", appConfig.getAppConfigJms().getConnectionFactoryName(), jmsConnectionFactory);
 		
 		return jmsConnectionFactory;
 	}
@@ -56,8 +87,8 @@ public class Application implements Serializable {
 	public Queue requestQueue() throws NamingException, JMSException {
 		
 		Context ctx = new InitialContext();
-		Queue requestQueue = (Queue) ctx.lookup(appConfig.getJms().getRequestQueueName());
-		LoggerUtils.logDebug(this.getClass(), "Looking up jms request queue: '{}' -> '{}'", appConfig.getJms().getRequestQueueName(), requestQueue.getQueueName());
+		Queue requestQueue = (Queue) ctx.lookup(appConfig.getAppConfigJms().getRequestQueueName());
+		LoggerUtils.logDebug(this.getClass(), "Looking up jms request queue: '{}' -> '{}'", appConfig.getAppConfigJms().getRequestQueueName(), requestQueue.getQueueName());
 
 		return requestQueue;
 	}
@@ -66,8 +97,8 @@ public class Application implements Serializable {
 	public Queue responseQueue() throws NamingException, JMSException {
 		
 		Context ctx = new InitialContext();
-		Queue responseQueue = (Queue) ctx.lookup(appConfig.getJms().getResponseQueueName());
-		LoggerUtils.logDebug(this.getClass(), "Looking up jms response queue: '{}' -> '{}'", appConfig.getJms().getResponseQueueName(), responseQueue.getQueueName());
+		Queue responseQueue = (Queue) ctx.lookup(appConfig.getAppConfigJms().getResponseQueueName());
+		LoggerUtils.logDebug(this.getClass(), "Looking up jms response queue: '{}' -> '{}'", appConfig.getAppConfigJms().getResponseQueueName(), responseQueue.getQueueName());
 		
 		return responseQueue;
 	}
@@ -76,15 +107,15 @@ public class Application implements Serializable {
 	public Queue listenerQueue() throws NamingException, JMSException {
 		
 		Context ctx = new InitialContext();
-		Queue listenerQueue = (Queue) ctx.lookup(appConfig.getJms().getListenerQueueName());
-		LoggerUtils.logDebug(this.getClass(), "Looking up jms listener queue: '{}' -> '{}'", appConfig.getJms().getListenerQueueName(), listenerQueue.getQueueName());
+		Queue listenerQueue = (Queue) ctx.lookup(appConfig.getAppConfigJms().getListenerQueueName());
+		LoggerUtils.logDebug(this.getClass(), "Looking up jms listener queue: '{}' -> '{}'", appConfig.getAppConfigJms().getListenerQueueName(), listenerQueue.getQueueName());
 		
 		return listenerQueue;
 	}
 	
 	@Bean(name = "jmsTimeout")
 	public Long jmsTimeout() {
-		return Long.valueOf(appConfig.getJms().getTimeout());
+		return Long.valueOf(appConfig.getAppConfigJms().getTimeout());
 	}
 	
 	@Bean
@@ -95,9 +126,18 @@ public class Application implements Serializable {
 		listenerContainer.setConnectionFactory(connectionFactory);
 		listenerContainer.setDestinationName(destinationQueue.getQueueName());
 		listenerContainer.setMessageListener(messageListener);
-		listenerContainer.setConcurrentConsumers(appConfig.getJms().getConcurrentConsumers().intValue());
-		listenerContainer.setMaxConcurrentConsumers(appConfig.getJms().getMaxConcurrentConsumers().intValue());
+		listenerContainer.setConcurrentConsumers(appConfig.getAppConfigJms().getConcurrentConsumers().intValue());
+		listenerContainer.setMaxConcurrentConsumers(appConfig.getAppConfigJms().getMaxConcurrentConsumers().intValue());
 		return listenerContainer;
 	}
+	
+	@Bean
+    public ThreadPoolTaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor pool = new ThreadPoolTaskExecutor();
+        pool.setCorePoolSize(5);
+        pool.setMaxPoolSize(34);
+        pool.setWaitForTasksToCompleteOnShutdown(true);
+        return pool;
+    }
 	
 }

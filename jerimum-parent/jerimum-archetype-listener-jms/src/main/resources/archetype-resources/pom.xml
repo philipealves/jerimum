@@ -28,6 +28,19 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
+			<dependency>
+	            <groupId>org.springframework.data</groupId>
+	            <artifactId>spring-data-releasetrain</artifactId>
+	            <version>Gosling-RELEASE</version>
+	            <type>pom</type>
+	            <scope>import</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
+	        </dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -39,7 +52,10 @@
 		<spring.version>4.2.2.RELEASE</spring.version>
 		
 		<!-- jee/mensageria -->
-		<javaee.api.version>6.0</javaee.api.version>
+		<jboss.javaee.version>1.0.0.Final</jboss.javaee.version>
+		
+		<!-- junit -->
+		<junit.version>4.12</junit.version>
 		
 		<!-- maven -->
 		<maven.compiler.target>1.7</maven.compiler.target>
@@ -57,11 +73,20 @@
 		</dependency>
 	
 		<!-- jee/mensageria -->
+		<dependency>  
+		   <groupId>org.jboss.spec</groupId>  
+		   <artifactId>jboss-javaee-6.0</artifactId>  
+		   <version>${symbol_dollar}{jboss.javaee.version}</version>  
+		   <type>pom</type>  
+		   <scope>provided</scope>  
+		</dependency> 
+		
+		<!-- test -->
 		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-			<version>${symbol_dollar}{javaee.api.version}</version>
-			<scope>provided</scope>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
 		</dependency>
 		
 	</dependencies>
