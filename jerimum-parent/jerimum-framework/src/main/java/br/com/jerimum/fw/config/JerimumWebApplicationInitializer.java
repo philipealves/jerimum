@@ -5,7 +5,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 import org.springframework.core.env.AbstractEnvironment;
-import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -53,9 +52,6 @@ public abstract class JerimumWebApplicationInitializer extends AbstractAnnotatio
 		LoggerUtils.logInfo(this.getClass(), ".:  Application name: {} :.", servletContext.getServletContextName());
 		LoggerUtils.logInfo(this.getClass(), ".:  Environment: {} :.", jerimumEnvironmentName);
 
-		AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-		context.register(getConfigurationClass());
-		servletContext.addListener(new ContextLoaderListener(context));
 		servletContext.addListener(new RequestContextListener());
 
 		ServletRegistration.Dynamic registration = servletContext.addServlet("dispatcher", new DispatcherServlet());
