@@ -73,7 +73,7 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                     <warName>${artifactId}</warName>
                 </configuration>
-            </plugin>
+            </plugin> 
             
             <!-- Web Resource Optimizer for Java -->
 			<plugin>
