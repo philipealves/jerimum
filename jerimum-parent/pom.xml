@@ -95,6 +95,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.archetype.packaging>2.4</maven.archetype.packaging>
 		<maven.archetype.plugin>2.4</maven.archetype.plugin>
+		<maven.war.plugin>2.6</maven.war.plugin>
 		
 	</properties>
 	
