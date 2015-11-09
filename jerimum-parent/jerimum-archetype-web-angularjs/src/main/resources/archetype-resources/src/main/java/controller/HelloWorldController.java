@@ -8,41 +8,53 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.jerimum.fw.i18n.I18nUtils;
+import ${package}.i18n.I18nKeys;
+
 /**
  * Hello World sample controller.
  * 
- * @author Dali Freire: dalifreire@gmail.com
- * @since 10/2015
+ * @author https://github.com/dalifreire/jerimum
+ * @since 11/2015
  */
 @RestController
 public class HelloWorldController {
-	
-	@RequestMapping("/user")
-	public Principal user(Principal user) {
-		return user;
-	}
 
-	@RequestMapping("/resource")
-	public Map<String, Object> home() {
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("id", UUID.randomUUID().toString());
-		model.put("content", String.format("Hello World '%s'!", getLoggedUsername()));
-		return model;
-	}
+    @Autowired
+    private MessageSource messageSource;
 
-	/**
-	 * Returns the logged username.
-	 * 
-	 * @return {@link String}
-	 */
-	private String getLoggedUsername() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		return (auth != null ? auth.getName() : null);
-	}
-	
+    @RequestMapping("/user")
+    public Principal user(Principal user) {
+        return user;
+    }
+
+    @RequestMapping("/resource")
+    public Map<String, Object> home() {
+
+        String helloWorldMessage = I18nUtils.getMsg(messageSource, I18nKeys.HelloWorldXxx.getKey(), getLoggedUsername());
+
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("id", UUID.randomUUID().toString());
+        model.put("content", helloWorldMessage);
+        return model;
+    }
+
+    /**
+     * Returns the logged username.
+     * 
+     * @return {@link String}
+     */
+    private String getLoggedUsername() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return (auth != null ? auth.getName() : null);
+    }
+
 }
+

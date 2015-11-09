@@ -8,30 +8,30 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import br.com.jerimum.fw.auth.JerimumDefaultSecurityConfiguration;
-import ${package}.util.NavigationConstants;
+import ${package}.util.Constants;
 
 /**
  * Security configuration for the application.
  * 
- * @author Dali Freire - dalifreire@gmail.com
- * @since 10/2015
+ * @author https://github.com/dalifreire/jerimum
+ * @since 11/2015
  */
 @EnableWebSecurity
 public class SecurityConfiguration extends JerimumDefaultSecurityConfiguration {
 
-	@Autowired
-	protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
-	}
-	
-	@Override
-	protected String getLoginPage() {
-		return NavigationConstants.LOGIN_PAGE;
-	}
+    @Autowired
+    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
+    }
 
-	@Override
-	protected String[] getUnsecuredResources() {
-		return new String[] { "/pages/open/**", "/resources/**", "/wro/**", "/" };
-	}
-	
+    @Override
+    protected String getLoginPage() {
+        return Constants.LOGIN_PAGE;
+    }
+
+    @Override
+    protected String[] getUnsecuredResources() {
+        return new String[] { "/pages/open/**", "/resources/**", "/wro/**", "/" };
+    }
+
 }

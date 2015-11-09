@@ -14,18 +14,17 @@ import br.com.jerimum.fw.aop.JerimumAspectMonitor;
 /**
  * Aspect for application monitoring.
  * 
- * @author Dali Freire - dalifreire@gmail.com
- * @since 10/2015
+ * @author https://github.com/dalifreire/jerimum
+ * @since 11/2015
  */
 @Aspect
 @Component
 @Order(200)
 public class AspectMonitor extends JerimumAspectMonitor {
-	
-	@Around("${package}.aop.AspectPointcuts.serviceImpl() || ${package}.aop.AspectPointcuts.controller()")
-	protected Object monitor(ProceedingJoinPoint jp) throws Throwable {
-		return super.monitor(jp);
-	}
+
+    @Around("${package}.aop.AspectPointcuts.controller()")
+    protected Object monitor(ProceedingJoinPoint jp) throws Throwable {
+        return super.monitor(jp);
+    }
 
 }
-
