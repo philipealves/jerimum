@@ -4,14 +4,14 @@
 package ${package}.util;
 
 /**
- * This class contains the navigation rules constants that will be used in the application.
+ * This class contains the constants that will be used in the application.
  * 
- * @author Dali Freire: dalifreire@gmail.com
- * @since 10/2015
+ * @author https://github.com/dalifreire/jerimum
+ * @since 11/2015
  */
-public class NavigationConstants {
+public class Constants {
 
-    private NavigationConstants() {
+    private Constants() {
 
     }
 

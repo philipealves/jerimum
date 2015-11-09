@@ -16,33 +16,35 @@ import br.com.jerimum.fw.aop.JerimumAspectLog;
 /**
  * Aspect to intercept and log application methods.
  * 
- * @author Dali Freire - dalifreire@gmail.com
- * @since 10/2015
+ * @author https://github.com/dalifreire/jerimum
+ * @since 11/2015
  */
 @Aspect
 @Component
 @Order(100)
 public class AspectLog extends JerimumAspectLog {
 
-    @Before("${package}.aop.AspectPointcuts.serviceImpl() || ${package}.aop.AspectPointcuts.controller()")
+    @Before("${package}.aop.AspectPointcuts.controller()")
     public void logEntry(JoinPoint jp) throws Exception {
-    	super.logEntry(jp);
+        super.logEntry(jp);
     }
 
-    @AfterReturning(pointcut = "(${package}.aop.AspectPointcuts.serviceImpl() || ${package}.aop.AspectPointcuts.controller()) && (execution(void *..*(..)))")
+    @AfterReturning(pointcut = "(${package}.aop.AspectPointcuts.controller()) && (execution(void *..*(..)))")
     public void logExit(JoinPoint jp) throws Exception {
-    	super.logExit(jp);
+        super.logExit(jp);
     }
 
-    @AfterReturning(pointcut = "(${package}.aop.AspectPointcuts.serviceImpl() || ${package}.aop.AspectPointcuts.controller()) && !(execution(void *..*(..)))", returning = "returningValue", argNames = "jp,returningValue")
+    @AfterReturning(pointcut = "(${package}.aop.AspectPointcuts.controller()) && !(execution(void *..*(..)))", returning = "returningValue", argNames = "jp,returningValue")
     public void logExit(JoinPoint jp, Object returningValue) throws Exception {
-    	super.logExit(jp, returningValue);
+        super.logExit(jp, returningValue);
     }
 
-    @AfterThrowing(pointcut = "${package}.aop.AspectPointcuts.serviceImpl()", throwing = "ex", argNames = "jp,ex")
+    @AfterThrowing(pointcut = "${package}.aop.AspectPointcuts.controller()", throwing = "ex", argNames = "jp,ex")
     public void logException(JoinPoint jp, Throwable ex) throws Throwable {
-    	super.logException(jp, ex);
+        super.logException(jp, ex);
     }
-    
+
 }
+
+
 

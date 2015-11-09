@@ -10,15 +10,15 @@ import br.com.jerimum.fw.config.JerimumWebApplicationInitializer;
 /**
  * Startup spring application class.
  * 
- * @author Dali Freire - dalifreire@gmail.com
- * @since 10/2015
+ * @author https://github.com/dalifreire/jerimum
+ * @since 11/2015
  */
 @Order(1)
 public class ApplicationInitializer extends JerimumWebApplicationInitializer {
 
-	@Override
-	public Class<?> getConfigurationClass() {
-		return Application.class;
-	}
+    @Override
+    public Class<?> getConfigurationClass() {
+        return Application.class;
+    }
 
 }

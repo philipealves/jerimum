@@ -10,18 +10,16 @@ import org.springframework.stereotype.Component;
 /**
  * Application pointcut definitions.
  * 
- * @author Dali Freire - dalifreire@gmail.com
+ * @author https://github.com/dalifreire/jerimum
  * @since 10/2015
  */
 @Aspect
 @Component
 public class AspectPointcuts {
 
-    @Pointcut("execution(* ${package}.service.impl.*ServiceImpl.*(..))")
-    public void serviceImpl() { }
-    
-
     @Pointcut("execution(* ${package}.controller.*Controller.*(..))")
-    public void controller() { }
-    
+    public void controller() {
+    }
+
 }
+
