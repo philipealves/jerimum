@@ -1,6 +1,6 @@
-#set( $symbol_pound = '#' )
-#set( $symbol_dollar = '$' )
-#set( $symbol_escape = '\' )
+#set($symbol_pound='#')
+#set($symbol_dollar='$')
+#set($symbol_escape='\')
 package ${package}.config;
 
 import java.io.Serializable;
@@ -14,8 +14,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * JMS properties configuration.
  * 
- * @author Dali Freire - dalifreire@gmail.com
+ * https://github.com/dalifreire/jerimum
  * @since 11/2015
  */
 @Data
@@ -25,27 +26,27 @@ import lombok.NoArgsConstructor;
 @Component
 public class ApplicationConfigJms implements Serializable {
 
-	private static final long serialVersionUID = 7896624401620243915L;
-	
-	@Value("${jms.connectionFactoryName}")
-	private String connectionFactoryName;
-	
-	@Value("${jms.requestQueueName}")
-	private String requestQueueName;
-	
-	@Value("${jms.responseQueueName}")
-	private String responseQueueName;
-	
-	@Value("${jms.listenerQueueName}")
-	private String listenerQueueName;
-	
-	@Value("${jms.timeout}")
-	private Long timeout;
-	
-	@Value("${jms.concurrentConsumers}")
-	private Long concurrentConsumers;
-	
-	@Value("${jms.maxConcurrentConsumers}")
-	private Long maxConcurrentConsumers;
-	
+    private static final long serialVersionUID = 7896624401620243915L;
+
+    @Value("${jms.connectionFactoryName}")
+    private String connectionFactoryName;
+
+    @Value("${jms.requestQueueName}")
+    private String requestQueueName;
+
+    @Value("${jms.responseQueueName}")
+    private String responseQueueName;
+
+    @Value("${jms.listenerQueueName}")
+    private String listenerQueueName;
+
+    @Value("${jms.timeout}")
+    private Long timeout;
+
+    @Value("${jms.concurrentConsumers}")
+    private Long concurrentConsumers;
+
+    @Value("${jms.maxConcurrentConsumers}")
+    private Long maxConcurrentConsumers;
+
 }
