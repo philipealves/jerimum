@@ -58,49 +58,49 @@ public abstract class I18nUtils {
      * Returns the internationalized message by key.
      * 
      * @param file - Arquivo de propriedade onde a mensagem sera buscada.
-     * @param chave - Chave de cadastro da mensagem.
+     * @param key - Chave de cadastro da mensagem.
      * @return String - Mensagem correspondente cadastrada.
      */
-    public static String getMsg(String file, String chave) {
+    public static String getMsg(String file, String key) {
 
         ResourceBundle bundle = getBundle(file);
-        return getMsg(bundle, chave);
+        return getMsg(bundle, key);
     }
 
     /**
      * Returns the internationalized message by key.
      * 
      * @param bundle - Arquivo de propriedade onde a mensagem sera buscada.
-     * @param chave - Chave de cadastro da mensagem.
+     * @param key - Chave de cadastro da mensagem.
      * @return String - Mensagem correspondente cadastrada.
      */
-    public static String getMsg(ResourceBundle bundle, String chave) {
+    public static String getMsg(ResourceBundle bundle, String key) {
 
-        return getMsg(bundle, chave, new Object[]{});
+        return getMsg(bundle, key, new Object[]{});
     }
     
     /**
      * Returns the internationalized message by key.
      * 
      * @param bundle - Arquivo de propriedade onde a mensagem sera buscada.
-     * @param chave Chave de cadastro da mensagem
-     * @param argumentos Argumentos utilizados para completar a mensagem
+     * @param key Chave de cadastro da mensagem
+     * @param arguments Argumentos utilizados para completar a mensagem
      * @return String BundleMenssageUtils cadastrada
      */
-    public static String getMsg(ResourceBundle bundle, String chave, Object... argumentos) {
+    public static String getMsg(ResourceBundle bundle, String key, Object... arguments) {
 
         String mensagem = null;
 
         try {
 
-            mensagem = MessageFormat.format(bundle.getString(chave), argumentos);
+            mensagem = MessageFormat.format(bundle.getString(key), arguments);
 
         } catch (MissingResourceException e) {
         	LoggerUtils.logError(I18nUtils.class, DEFAULT_FAIL_MSG, e);
-            mensagem = chave.concat(SUFIX_UNDEFINED);
+            mensagem = key.concat(SUFIX_UNDEFINED);
         } catch (Exception e) {
             LoggerUtils.logError(I18nUtils.class, DEFAULT_FAIL_MSG, e);
-            mensagem = chave.concat(SUFIX_UNDEFINED);
+            mensagem = key.concat(SUFIX_UNDEFINED);
         }
 
         return mensagem;
@@ -110,14 +110,26 @@ public abstract class I18nUtils {
      * Returns the internationalized message by key.
      * 
      * @param file - Arquivo de propriedade onde a mensagem sera buscada.
-     * @param chave Chave de cadastro da mensagem
-     * @param argumentos Argumentos utilizados para completar a mensagem
+     * @param key Chave de cadastro da mensagem
+     * @param arguments Argumentos utilizados para completar a mensagem
      * @return String BundleMenssageUtils cadastrada
      */
-    public static String getMsg(String file, String chave, Object... argumentos) {
+    public static String getMsg(String file, String key, Object... arguments) {
 
         ResourceBundle bundle = getBundle(file);
-        return getMsg(bundle, chave, argumentos);
+        return getMsg(bundle, key, arguments);
+    }
+
+    /**
+     * Returns the internationalized message by key.
+     * 
+     * @param messageSource - Arquivo de propriedade onde a mensagem sera buscada.
+     * @param key - Chave de cadastro da mensagem
+     * @return {@link String}
+     */
+    public static String getMsg(MessageSource messageSource, String key) {
+
+        return getMsg(messageSource, key, new Object[]{});
     }
 
     /**
@@ -125,28 +137,16 @@ public abstract class I18nUtils {
      * 
      * @param messageSource - Arquivo de propriedade onde a mensagem sera buscada.
      * @param chave - Chave de cadastro da mensagem
+     * @param arguments - Argumentos utilizados para completar a mensagem
      * @return {@link String}
      */
-    public static String getMsg(MessageSource messageSource, String chave) {
-
-        return getMsg(messageSource, chave, new Object[]{});
-    }
-
-    /**
-     * Returns the internationalized message by key.
-     * 
-     * @param messageSource - Arquivo de propriedade onde a mensagem sera buscada.
-     * @param chave - Chave de cadastro da mensagem
-     * @param argumentos - Argumentos utilizados para completar a mensagem
-     * @return {@link String}
-     */
-    public static String getMsg(MessageSource messageSource, String chave, Object... argumentos) {
+    public static String getMsg(MessageSource messageSource, String chave, Object... arguments) {
 
         String mensagem = null;
         
         try {
             
-            mensagem = messageSource.getMessage(chave, argumentos, Locale.getDefault());
+            mensagem = messageSource.getMessage(chave, arguments, Locale.getDefault());
             
         } catch (NoSuchMessageException e) {
             LoggerUtils.logError(I18nUtils.class, DEFAULT_FAIL_MSG, e);
