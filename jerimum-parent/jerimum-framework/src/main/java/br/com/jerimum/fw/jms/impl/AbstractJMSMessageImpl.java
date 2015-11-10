@@ -100,7 +100,7 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
      * @see br.com.jerimum.fw.jms.JMSMessage#sendTextMessage(java.lang.String, java.lang.String)
      */
     public TextMessage sendTextMessage(final String msg, final String correlationID) throws MessageException {
-        
+
         try {
 
             JMSMessageCreator<TextMessage> messageCreator = new JMSMessageCreator<TextMessage>() {
@@ -115,7 +115,7 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
         } catch (Exception e) {
             throw new MessageException(e);
         }
-        
+
     }
 
     /*
@@ -167,8 +167,7 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
             LoggerUtils.logDebug(AbstractJMSMessageImpl.class, "Sending message to queue '{}'...",
                 queue.getQueueName());
             jmsTemplate.send(queue.getQueueName(), messageCreator);
-            LoggerUtils.logDebug(AbstractJMSMessageImpl.class, "Message '{}' sent!",
-                messageCreator.getMessage().getJMSMessageID());
+            LoggerUtils.logDebug(AbstractJMSMessageImpl.class, "Message '{}' sent!", messageCreator.getMessage());
 
             return messageCreator.getMessage();
 
