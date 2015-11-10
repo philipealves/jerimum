@@ -87,6 +87,9 @@
 		<!-- junit -->
 		<junit.version>4.12</junit.version>
 		
+		<!-- mockito -->
+		<mockito.version>2.0.31-beta</mockito.version>
+		
 		<scala.library.version>2.10.4</scala.library.version>
 	
 		<!-- maven -->
