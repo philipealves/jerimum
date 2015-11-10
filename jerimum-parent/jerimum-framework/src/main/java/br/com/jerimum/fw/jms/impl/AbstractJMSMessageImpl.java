@@ -164,9 +164,8 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
 
         try {
 
-            LoggerUtils.logDebug(AbstractJMSMessageImpl.class, "Sending message to queue '{}'...",
-                queue.getQueueName());
-            jmsTemplate.send(queue.getQueueName(), messageCreator);
+            LoggerUtils.logDebug(AbstractJMSMessageImpl.class, "Sending message to queue '{}'...", queue);
+            jmsTemplate.send(queue, messageCreator);
             LoggerUtils.logDebug(AbstractJMSMessageImpl.class, "Message '{}' sent!", messageCreator.getMessage());
 
             return messageCreator.getMessage();
