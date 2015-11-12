@@ -84,6 +84,33 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
         }
     }
 
+    @Override
+    public String sendAndReceive(JMSMessageCreator<TextMessage> messageCreator) throws MessageException {
+
+        if (messageCreator == null) {
+            throw new MessageException("Message cannot be null!");
+        }
+
+        try {
+
+            // ENVIA A MENSAGEM
+            Message messageSent = sendMessage(messageCreator, getRequestQueue());
+
+            // RECUPERA A RESPOSTA
+            String messageSelector = String.format("JMSCorrelationID='%s'", messageSent.getJMSMessageID());
+            String response = receiveTextMessage(messageSelector);
+
+            return response;
+
+        } catch (MessageException e) {
+            LoggerUtils.logError(AbstractJMSMessageImpl.class, "Unable to send/receive message!", e);
+            throw e;
+        } catch (Exception e) {
+            LoggerUtils.logError(AbstractJMSMessageImpl.class, "Unable to send/receive message!", e);
+            throw new MessageException(e);
+        }
+    }
+
     /*
      * (non-Javadoc)
      * 

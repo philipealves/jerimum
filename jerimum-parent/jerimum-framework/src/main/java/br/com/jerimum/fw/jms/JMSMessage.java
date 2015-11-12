@@ -71,6 +71,15 @@ public interface JMSMessage {
      * @throws MessageException
      */
     String sendAndReceive(String message) throws MessageException;
+    
+    /**
+     * Envia a mensagem passada como parametro recuperando a mensagem de resposta.
+     * 
+     * @param messageCreator >> Mensagem que sera postada na fila de request.
+     * @return {@link String} >> Mensagem de resposta.
+     * @throws MessageException
+     */
+    String sendAndReceive(JMSMessageCreator<TextMessage> messageCreator) throws MessageException;
 
     /**
      * Posta a mensagem passada como parametro (de forma textual) na fila.
