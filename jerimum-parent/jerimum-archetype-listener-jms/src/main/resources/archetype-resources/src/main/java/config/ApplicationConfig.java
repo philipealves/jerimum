@@ -1,6 +1,6 @@
-#set( $symbol_pound = '#' )
-#set( $symbol_dollar = '$' )
-#set( $symbol_escape = '\' )
+#set($symbol_pound='#')
+#set($symbol_dollar='$')
+#set($symbol_escape='\')
 package ${package}.config;
 
 import java.io.Serializable;
@@ -15,8 +15,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * Properties configurations used in the application.
  * 
- * @author Dali Freire - dalifreire@gmail.com
+ * https://github.com/dalifreire/jerimum
  * @since 11/2015
  */
 @Data
@@ -26,14 +27,14 @@ import lombok.NoArgsConstructor;
 @Component
 public class ApplicationConfig implements Serializable {
 
-	private static final long serialVersionUID = 7896624401620243915L;
+    private static final long serialVersionUID = 7896624401620243915L;
 
-	@Value("${basePackages}")
-	private String basePackages;
-	@Value("${applicationName}")
-	private String applicationName;
-	
-	@Autowired
-	private ApplicationConfigJms appConfigJms;
-	
+    @Value("${basePackages}")
+    private String basePackages;
+    @Value("${applicationName}")
+    private String applicationName;
+
+    @Autowired
+    private ApplicationConfigJms appConfigJms;
+
 }

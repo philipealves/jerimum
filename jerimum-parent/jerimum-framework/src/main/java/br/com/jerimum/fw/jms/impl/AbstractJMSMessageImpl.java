@@ -33,7 +33,8 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
      */
     public void afterPropertiesSet() throws Exception {
 
-        LoggerUtils.logDebug(AbstractJMSMessageImpl.class, "Starting JMS message with JMSConnectionFactory: {}", getConnectionFactory());
+        LoggerUtils.logDebug(AbstractJMSMessageImpl.class, "Starting JMS message with JMSConnectionFactory: {}",
+            getConnectionFactory());
 
         this.jmsTemplate = new JmsTemplate(getConnectionFactory());
         this.jmsTemplate.setDeliveryPersistent(false);
@@ -83,6 +84,33 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
         }
     }
 
+    @Override
+    public String sendAndReceive(JMSMessageCreator<TextMessage> messageCreator) throws MessageException {
+
+        if (messageCreator == null) {
+            throw new MessageException("Message cannot be null!");
+        }
+
+        try {
+
+            // ENVIA A MENSAGEM
+            Message messageSent = sendMessage(messageCreator, getRequestQueue());
+
+            // RECUPERA A RESPOSTA
+            String messageSelector = String.format("JMSCorrelationID='%s'", messageSent.getJMSMessageID());
+            String response = receiveTextMessage(messageSelector);
+
+            return response;
+
+        } catch (MessageException e) {
+            LoggerUtils.logError(AbstractJMSMessageImpl.class, "Unable to send/receive message!", e);
+            throw e;
+        } catch (Exception e) {
+            LoggerUtils.logError(AbstractJMSMessageImpl.class, "Unable to send/receive message!", e);
+            throw new MessageException(e);
+        }
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -91,6 +119,30 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
     public TextMessage sendTextMessage(final String msg) throws MessageException {
 
         return sendTextMessage(msg, getRequestQueue());
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see br.com.jerimum.fw.jms.JMSMessage#sendTextMessage(java.lang.String, java.lang.String)
+     */
+    public TextMessage sendTextMessage(final String msg, final String correlationID) throws MessageException {
+
+        try {
+
+            JMSMessageCreator<TextMessage> messageCreator = new JMSMessageCreator<TextMessage>() {
+                public void setParams(TextMessage message) throws JMSException {
+                    message.setText(msg);
+                    message.setJMSCorrelationID(correlationID);
+                }
+            };
+
+            return (TextMessage) sendMessage(messageCreator, getRequestQueue());
+
+        } catch (Exception e) {
+            throw new MessageException(e);
+        }
+
     }
 
     /*
@@ -139,9 +191,9 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
 
         try {
 
-            LoggerUtils.logDebug(AbstractJMSMessageImpl.class, "Sending message to queue '{}'...", queue.getQueueName());
-            jmsTemplate.send(queue.getQueueName(), messageCreator);
-            LoggerUtils.logDebug(AbstractJMSMessageImpl.class, "Message '{}' sent!", messageCreator.getMessage().getJMSMessageID());
+            LoggerUtils.logDebug(AbstractJMSMessageImpl.class, "Sending message to queue '{}'...", queue);
+            jmsTemplate.send(queue, messageCreator);
+            LoggerUtils.logDebug(AbstractJMSMessageImpl.class, "Message '{}' sent!", messageCreator.getMessage());
 
             return messageCreator.getMessage();
 
@@ -183,9 +235,9 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
             long finishTime = System.currentTimeMillis() + getTimeout();
             while (resMessage == null && System.currentTimeMillis() < finishTime) {
 
-            	resMessage = this.jmsTemplate.receiveSelected(queue.getQueueName(), messageSelector);
+                resMessage = this.jmsTemplate.receiveSelected(queue.getQueueName(), messageSelector);
             }
-            
+
             LoggerUtils.logTrace(AbstractJMSMessageImpl.class, "Received message: '{}'", resMessage);
 
             return resMessage;
@@ -196,7 +248,8 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
     }
 
     /**
-     * Recupera a mensagem da fila de reponse de acordo com o messageSelector passado como parametro.
+     * Recupera a mensagem da fila de reponse de acordo com o messageSelector passado como
+     * parametro.
      * 
      * @param messageSelector
      * @return String

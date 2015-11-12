@@ -87,6 +87,9 @@
 		<!-- junit -->
 		<junit.version>4.12</junit.version>
 		
+		<!-- mockito -->
+		<mockito.version>2.0.31-beta</mockito.version>
+		
 		<scala.library.version>2.10.4</scala.library.version>
 	
 		<!-- maven -->
@@ -100,74 +103,89 @@
 	</properties>
 	
 	
+	
+	<!-- deploy artifacts into this repo -->
+	<distributionManagement>
+		<repository>
+			<id>nexus</id>
+			<name>Repositorio de Releases</name>
+			<url>http://172.16.140.132:8081/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>nexus</id>
+			<name>Repositorios de Snapshots</name>
+			<url>http://172.16.140.132:8081/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
 	<!-- download artifacts from this repo -->
 	<repositories>
-		<!--<repository>-->
-			<!--<id>nexus</id>-->
-			<!--<name>nexus</name>-->
-			<!--<url>http://localhost:8081/nexus/content/groups/public/</url>-->
-			<!--<releases>-->
-				<!--<enabled>true</enabled>-->
-			<!--</releases>-->
-			<!--<snapshots>-->
-				<!--<enabled>true</enabled>-->
-			<!--</snapshots>-->
-		<!--</repository>-->
 		<repository>
-			<id>spring-snapshots</id>
-			<name>Spring Snapshots</name>
-			<url>http://repo.spring.io/snapshot</url>
+			<id>nexus</id>
+			<name>nexus</name>
+			<url>http://172.16.140.132:8081/nexus/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
-		<repository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
-			<url>http://repo.spring.io/milestone</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
+<!-- 		<repository> -->
+<!-- 			<id>spring-snapshots</id> -->
+<!-- 			<name>Spring Snapshots</name> -->
+<!-- 			<url>http://repo.spring.io/snapshot</url> -->
+<!-- 			<snapshots> -->
+<!-- 				<enabled>true</enabled> -->
+<!-- 			</snapshots> -->
+<!-- 		</repository> -->
+<!-- 		<repository> -->
+<!-- 			<id>spring-milestones</id> -->
+<!-- 			<name>Spring Milestones</name> -->
+<!-- 			<url>http://repo.spring.io/milestone</url> -->
+<!-- 			<snapshots> -->
+<!-- 				<enabled>false</enabled> -->
+<!-- 			</snapshots> -->
+<!-- 		</repository> -->
 	</repositories>
 
 	<!-- download plugins from this repo -->
 	<pluginRepositories>
-		<!--<pluginRepository>-->
-			<!--<id>nexus</id>-->
-			<!--<name>nexus</name>-->
-			<!--<url>http://localhost:8081/nexus/content/groups/public/</url>-->
-			<!--<releases>-->
-				<!--<enabled>true</enabled>-->
-			<!--</releases>-->
-			<!--<snapshots>-->
-				<!--<enabled>true</enabled>-->
-			<!--</snapshots>-->
-		<!--</pluginRepository>-->
 		<pluginRepository>
-			<id>spring-snapshots</id>
-			<name>Spring Snapshots</name>
-			<url>http://repo.spring.io/snapshot</url>
+			<id>nexus</id>
+			<name>nexus</name>
+			<url>http://172.16.140.132:8081/nexus/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
 		</pluginRepository>
-		<pluginRepository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
-			<url>http://repo.spring.io/milestone</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<id>spring-releases</id>
-			<name>Spring Releases</name>
-			<url>http://repo.spring.io/release</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
+<!-- 		<pluginRepository> -->
+<!-- 			<id>spring-snapshots</id> -->
+<!-- 			<name>Spring Snapshots</name> -->
+<!-- 			<url>http://repo.spring.io/snapshot</url> -->
+<!-- 			<snapshots> -->
+<!-- 				<enabled>true</enabled> -->
+<!-- 			</snapshots> -->
+<!-- 		</pluginRepository> -->
+<!-- 		<pluginRepository> -->
+<!-- 			<id>spring-milestones</id> -->
+<!-- 			<name>Spring Milestones</name> -->
+<!-- 			<url>http://repo.spring.io/milestone</url> -->
+<!-- 			<snapshots> -->
+<!-- 				<enabled>false</enabled> -->
+<!-- 			</snapshots> -->
+<!-- 		</pluginRepository> -->
+<!-- 		<pluginRepository> -->
+<!-- 			<id>spring-releases</id> -->
+<!-- 			<name>Spring Releases</name> -->
+<!-- 			<url>http://repo.spring.io/release</url> -->
+<!-- 			<snapshots> -->
+<!-- 				<enabled>false</enabled> -->
+<!-- 			</snapshots> -->
+<!-- 		</pluginRepository> -->
 	</pluginRepositories>
 	
 </project>
