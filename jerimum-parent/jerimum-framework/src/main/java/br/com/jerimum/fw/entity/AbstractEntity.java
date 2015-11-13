@@ -27,11 +27,7 @@ public abstract class AbstractEntity<T extends Serializable> implements Serializ
      */
     public abstract String getLabel();
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
+    @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }

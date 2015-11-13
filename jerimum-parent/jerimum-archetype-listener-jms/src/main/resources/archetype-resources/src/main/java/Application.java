@@ -27,7 +27,10 @@ import org.springframework.jms.listener.DefaultMessageListenerContainer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import br.com.jerimum.fw.logging.LoggerUtils;import ${package}.config.ApplicationConfig;import ${package}.jms.listener.HelloWorldMessageListener;
+import br.com.jerimum.fw.exception.MessageException;
+import br.com.jerimum.fw.logging.LoggerUtils;
+import ${package}.config.ApplicationConfig;
+import ${package}.jms.listener.HelloWorldMessageListener;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -49,7 +52,7 @@ public class Application implements InitializingBean, Serializable {
     private static final long serialVersionUID = 7271156509131604941L;
 
     @Autowired
-    private Environment environment;
+    private transient Environment environment;
 
     @Autowired
     private ApplicationConfig appConfig;
@@ -85,36 +88,54 @@ public class Application implements InitializingBean, Serializable {
     }
 
     @Bean(name = "requestQueue")
-    public Queue requestQueue() throws NamingException, JMSException {
+    public Queue requestQueue() throws MessageException {
 
-        Context ctx = new InitialContext();
-        Queue requestQueue = (Queue) ctx.lookup(appConfig.getAppConfigJms().getRequestQueueName());
-        LoggerUtils.logDebug(this.getClass(), "Looking up jms request queue: '{}' -> '{}'",
-            appConfig.getAppConfigJms().getRequestQueueName(), requestQueue.getQueueName());
+        try {
+            
+            Context ctx = new InitialContext();
+            Queue requestQueue = (Queue) ctx.lookup(appConfig.getAppConfigJms().getRequestQueueName());
+            LoggerUtils.logDebug(this.getClass(), "Looking up jms request queue: '{}' -> '{}'",
+                appConfig.getAppConfigJms().getRequestQueueName(), requestQueue.getQueueName());
+    
+            return requestQueue;
 
-        return requestQueue;
+        } catch (Exception e) {
+            throw new MessageException(e);
+        }
     }
 
     @Bean(name = "responseQueue")
-    public Queue responseQueue() throws NamingException, JMSException {
+    public Queue responseQueue() throws MessageException {
 
-        Context ctx = new InitialContext();
-        Queue responseQueue = (Queue) ctx.lookup(appConfig.getAppConfigJms().getResponseQueueName());
-        LoggerUtils.logDebug(this.getClass(), "Looking up jms response queue: '{}' -> '{}'",
-            appConfig.getAppConfigJms().getResponseQueueName(), responseQueue.getQueueName());
+        try {
+            
+            Context ctx = new InitialContext();
+            Queue responseQueue = (Queue) ctx.lookup(appConfig.getAppConfigJms().getResponseQueueName());
+            LoggerUtils.logDebug(this.getClass(), "Looking up jms response queue: '{}' -> '{}'",
+                appConfig.getAppConfigJms().getResponseQueueName(), responseQueue.getQueueName());
+    
+            return responseQueue;
 
-        return responseQueue;
+        } catch (Exception e) {
+            throw new MessageException(e);
+        }
     }
 
     @Bean(name = "listenerQueue")
-    public Queue listenerQueue() throws NamingException, JMSException {
+    public Queue listenerQueue() throws MessageException {
 
-        Context ctx = new InitialContext();
-        Queue listenerQueue = (Queue) ctx.lookup(appConfig.getAppConfigJms().getListenerQueueName());
-        LoggerUtils.logDebug(this.getClass(), "Looking up jms listener queue: '{}' -> '{}'",
-            appConfig.getAppConfigJms().getListenerQueueName(), listenerQueue.getQueueName());
+        try {
+            
+            Context ctx = new InitialContext();
+            Queue listenerQueue = (Queue) ctx.lookup(appConfig.getAppConfigJms().getListenerQueueName());
+            LoggerUtils.logDebug(this.getClass(), "Looking up jms listener queue: '{}' -> '{}'",
+                appConfig.getAppConfigJms().getListenerQueueName(), listenerQueue.getQueueName());
+    
+            return listenerQueue;
 
-        return listenerQueue;
+        } catch (Exception e) {
+            throw new MessageException(e);
+        }
     }
 
     @Bean(name = "jmsTimeout")

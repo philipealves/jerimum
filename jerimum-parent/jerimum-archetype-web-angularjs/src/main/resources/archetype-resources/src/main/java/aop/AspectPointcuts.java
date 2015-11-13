@@ -19,6 +19,7 @@ public class AspectPointcuts {
 
     @Pointcut("execution(* ${package}.controller.*Controller.*(..))")
     public void controller() {
+        // Do nothing, only for pointcut definition
     }
 
 }

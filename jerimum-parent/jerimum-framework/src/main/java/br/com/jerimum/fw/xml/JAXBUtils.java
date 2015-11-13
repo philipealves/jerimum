@@ -49,9 +49,7 @@ public final class JAXBUtils {
 
         File fileSchema = getFile(path);
         SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = sf.newSchema(fileSchema);
-
-        return schema;
+        return sf.newSchema(fileSchema);
     }
 
     /**

@@ -25,19 +25,20 @@ import lombok.Getter;
  */
 public abstract class JMSMessageCreator<T extends Message> implements MessageCreator {
 
-	@Getter
+    @Getter
     private T message;
-	@Getter
+    @Getter
     private Class<T> messageType;
 
     @SuppressWarnings("unchecked")
     public JMSMessageCreator() {
         Type genericSuperclass = getClass().getGenericSuperclass();
         ParameterizedType type = (ParameterizedType) genericSuperclass;
-        this.messageType = ((Class<T>) type.getActualTypeArguments()[0]);
+        this.messageType = (Class<T>) type.getActualTypeArguments()[0];
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public Message createMessage(Session session) throws JMSException {
 
         if (this.messageType.equals(TextMessage.class)) {
@@ -72,6 +73,7 @@ public abstract class JMSMessageCreator<T extends Message> implements MessageCre
 
     public abstract void setParams(T message) throws JMSException;
 
+    @Override
     public String toString() {
         return getClass().getName() + " - message: \n"
             + (this.message != null ? this.message.toString() : "message not exists yet!");

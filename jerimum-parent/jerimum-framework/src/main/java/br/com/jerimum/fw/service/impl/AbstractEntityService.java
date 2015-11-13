@@ -23,39 +23,43 @@ import br.com.jerimum.fw.service.EntityService;
  */
 public abstract class AbstractEntityService<ENTITY extends AbstractEntity<?>> implements EntityService<ENTITY> {
 
-	@Autowired
-	private MessageSource messageSource;
+    @Autowired
+    private MessageSource messageSource;
 
-	protected abstract JpaCrudRepository<ENTITY, Long> getRepository();
+    protected abstract JpaCrudRepository<ENTITY, Long> getRepository();
 
-	public ENTITY getEntityById(Long id) {
-		return getRepository().findOne(id);
-	}
-	
-	public ENTITY saveEntity(ENTITY entity) {
-		return getRepository().save(entity);
-	}
+    @Override
+    public ENTITY getEntityById(Long id) {
+        return getRepository().findOne(id);
+    }
 
-	public void deleteEntityById(Long id) {
-		ENTITY entity = getRepository().findOne(id);
-		if (entity == null) {
-			Class<ENTITY> clazz = getEntityClass();
-			throwEmptyResultDataAccessException(clazz.getName(), id);
-		}
-		getRepository().delete(entity);
-	}
+    @Override
+    public ENTITY saveEntity(ENTITY entity) {
+        return getRepository().save(entity);
+    }
 
-	public Set<ENTITY> getAllEntities() {
-		return Sets.newHashSet(getRepository().findAll());
-	}
+    @Override
+    public void deleteEntityById(Long id) {
+        ENTITY entity = getRepository().findOne(id);
+        if (entity == null) {
+            Class<ENTITY> clazz = getEntityClass();
+            throwEmptyResultDataAccessException(clazz.getName(), id);
+        }
+        getRepository().delete(entity);
+    }
 
-	@SuppressWarnings("unchecked")
-	private Class<ENTITY> getEntityClass() {
-		return (Class<ENTITY>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
-	}
+    @Override
+    public Set<ENTITY> getAllEntities() {
+        return Sets.newHashSet(getRepository().findAll());
+    }
 
-	protected void throwEmptyResultDataAccessException(String entity, Long id) {
-		String msg = I18nUtils.getMsg(this.messageSource, "msg.entity.not.found", entity, id);
-		throw new EmptyResultDataAccessException(msg, 1);
-	}
+    @SuppressWarnings("unchecked")
+    private Class<ENTITY> getEntityClass() {
+        return (Class<ENTITY>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
+    }
+
+    protected void throwEmptyResultDataAccessException(String entity, Long id) {
+        String msg = I18nUtils.getMsg(this.messageSource, "msg.entity.not.found", entity, id);
+        throw new EmptyResultDataAccessException(msg, 1);
+    }
 }

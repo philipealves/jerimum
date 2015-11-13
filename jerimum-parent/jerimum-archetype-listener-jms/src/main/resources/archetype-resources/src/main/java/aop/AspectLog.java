@@ -25,21 +25,25 @@ import br.com.jerimum.fw.aop.JerimumAspectLog;
 public class AspectLog extends JerimumAspectLog {
 
     @Before("${package}.aop.AspectPointcuts.serviceImpl() || ${package}.aop.AspectPointcuts.messageListener()")
+    @Override
     public void logEntry(JoinPoint jp) throws Exception {
         super.logEntry(jp);
     }
 
     @AfterReturning(pointcut = "(${package}.aop.AspectPointcuts.serviceImpl() || ${package}.aop.AspectPointcuts.messageListener()) && (execution(void *..*(..)))")
+    @Override
     public void logExit(JoinPoint jp) throws Exception {
         super.logExit(jp);
     }
 
     @AfterReturning(pointcut = "(${package}.aop.AspectPointcuts.serviceImpl() || ${package}.aop.AspectPointcuts.messageListener()) && !(execution(void *..*(..)))", returning = "returningValue", argNames = "jp,returningValue")
+    @Override
     public void logExit(JoinPoint jp, Object returningValue) throws Exception {
         super.logExit(jp, returningValue);
     }
 
     @AfterThrowing(pointcut = "${package}.aop.AspectPointcuts.serviceImpl()", throwing = "ex", argNames = "jp,ex")
+    @Override
     public void logException(JoinPoint jp, Throwable ex) throws Throwable {
         super.logException(jp, ex);
     }

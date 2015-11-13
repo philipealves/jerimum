@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.jerimum.fw.exception.MessageException;
-import br.com.jerimum.fw.exception.ServiceException;import ${package}.jms.HelloWorldMessage;import ${package}.service.HelloWorldService;
+import br.com.jerimum.fw.exception.ServiceException;
+import ${package}.jms.HelloWorldJMSMessage;
+import ${package}.service.HelloWorldService;
 
 /**
  * Service class for hello world operations.
@@ -19,7 +21,7 @@ import br.com.jerimum.fw.exception.ServiceException;import ${package}.jms.HelloW
 public class HelloWorldServiceImpl implements HelloWorldService {
 
     @Autowired
-    private HelloWorldMessage helloWorldMessage;
+    private HelloWorldJMSMessage helloWorldMessage;
 
     @Override
     public void propagateReceivedMessage(String msg) throws ServiceException {

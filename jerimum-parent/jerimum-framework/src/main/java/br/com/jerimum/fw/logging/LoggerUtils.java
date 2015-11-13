@@ -193,9 +193,9 @@ public class LoggerUtils {
      * @return {@link File}
      */
     public static File getLogFile() {
-		// TODO
-		// return br.com.jerimum.config.LoggerConfigurator.getLogFile();
-    	return null;
+        // TODO
+        // return br.com.jerimum.config.LoggerConfigurator.getLogFile();
+        return null;
     }
 
 }

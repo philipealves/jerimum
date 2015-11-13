@@ -15,37 +15,14 @@ import br.com.jerimum.fw.entity.AbstractEntity;
  */
 public interface CrudService<DTO extends AbstractDto, ENTITY extends AbstractEntity<?>> {
 
-	/**
-	 * 
-	 * @param id
-	 * @return
-	 */
     DTO getDtoById(Long id);
-    
-    /**
-     * 
-     * @param dto
-     * @return
-     */
+
     DTO insertDto(DTO dto);
-    
-    /**
-     * 
-     * @param dto
-     * @return
-     */
+
     DTO updateDto(DTO dto);
-    
-    /**
-     * 
-     * @param id
-     */
+
     void deleteDtoById(Long id);
-    
-    /**
-     * 
-     * @return
-     */
+
     Set<DTO> getAllDtos();
-    
+
 }

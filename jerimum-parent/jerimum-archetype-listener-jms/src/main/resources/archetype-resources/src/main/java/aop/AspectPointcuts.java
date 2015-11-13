@@ -19,11 +19,12 @@ public class AspectPointcuts {
 
     @Pointcut("execution(* ${package}.service.impl.*ServiceImpl.*(..))")
     public void serviceImpl() {
+        // Do nothing, only for pointcut definition
     }
-
 
     @Pointcut("execution(* ${package}.jms.listener.*MessageListener.*(..))")
     public void messageListener() {
+        // Do nothing, only for pointcut definition
     }
 
 }

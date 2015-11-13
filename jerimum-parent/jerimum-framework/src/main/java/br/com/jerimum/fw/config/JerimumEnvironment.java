@@ -21,6 +21,10 @@ public final class JerimumEnvironment {
     private static final String FILE_PROTOCOL = "file:";
     private static String environment;
 
+    private JerimumEnvironment() {
+
+    }
+
     /**
      * Returns the value of the JVM property <i>jerimum.internal.environment.config</i>.
      * 
@@ -41,7 +45,8 @@ public final class JerimumEnvironment {
         String externalEnvironment = System.getProperty(EXTERNAL_ENVIRONMENT_CONFIG, null);
         externalEnvironment = StringUtils.replace(externalEnvironment, "\\", "/");
 
-        if (StringUtils.isNotBlank(externalEnvironment) && !StringUtils.startsWith(externalEnvironment, FILE_PROTOCOL)) {
+        if (StringUtils.isNotBlank(externalEnvironment)
+            && !StringUtils.startsWith(externalEnvironment, FILE_PROTOCOL)) {
             externalEnvironment = FILE_PROTOCOL + externalEnvironment;
         }
         externalEnvironment = StringUtils.removeEnd(externalEnvironment, File.separator);
@@ -52,9 +57,9 @@ public final class JerimumEnvironment {
      * Returns the configured environment. <br/>
      * The following precedence sequence will be returned: <br>
      * <ul>
-     * <li>1) External environment. </li>
-     * <li>2) Internal environment. </li>
-     * <li>3) Default environment.  </li>
+     * <li>1) External environment.</li>
+     * <li>2) Internal environment.</li>
+     * <li>3) Default environment.</li>
      * 
      * @return {@link String}
      */
@@ -62,33 +67,34 @@ public final class JerimumEnvironment {
 
         try {
 
-        	if (StringUtils.isBlank(environment)) {
-        		
-	        	String jerimumEnvironment = getExternalEnvironmentConfigValue();
-	        	if (StringUtils.isBlank(jerimumEnvironment)) {
-	        		jerimumEnvironment = getInternalEnvironmentConfigValue();
-	        		if (StringUtils.isBlank(jerimumEnvironment)) {
-	        			jerimumEnvironment = DEFAULT_ENVIRONMENT;
-	                }
-	        	}
-	        	environment = jerimumEnvironment;
-        	}
-        	
+            if (StringUtils.isBlank(environment)) {
+
+                String jerimumEnvironment = getExternalEnvironmentConfigValue();
+                if (StringUtils.isBlank(jerimumEnvironment)) {
+                    jerimumEnvironment = getInternalEnvironmentConfigValue();
+                    if (StringUtils.isBlank(jerimumEnvironment)) {
+                        jerimumEnvironment = DEFAULT_ENVIRONMENT;
+                    }
+                }
+                environment = jerimumEnvironment;
+            }
+
             return environment;
 
         } catch (SecurityException e) {
-            LoggerUtils.logWarning(JerimumEnvironment.class, "Unable to read system property: \"" + INTERNAL_ENVIRONMENT_CONFIG + "\"", e);
+            LoggerUtils.logWarning(JerimumEnvironment.class,
+                "Unable to read system property: \"" + INTERNAL_ENVIRONMENT_CONFIG + "\"", e);
             return DEFAULT_ENVIRONMENT;
         }
     }
-    
+
     /**
      * Return <code>true</code> if it is a external environment.
      * 
      * @return boolean
      */
     public static boolean isExternalEnvironment() {
-    	return isExternalEnvironment(getEnvironment());
+        return isExternalEnvironment(getEnvironment());
     }
 
     /**
@@ -98,7 +104,7 @@ public final class JerimumEnvironment {
      * @return boolean
      */
     public static boolean isExternalEnvironment(String environment) {
-    	return StringUtils.startsWith(environment, FILE_PROTOCOL);
+        return StringUtils.startsWith(environment, FILE_PROTOCOL);
     }
-    
+
 }

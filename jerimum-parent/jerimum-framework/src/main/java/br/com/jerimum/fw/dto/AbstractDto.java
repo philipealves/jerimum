@@ -15,11 +15,7 @@ public abstract class AbstractDto implements Serializable {
 
     private static final long serialVersionUID = 3618027273576204047L;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
+    @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }

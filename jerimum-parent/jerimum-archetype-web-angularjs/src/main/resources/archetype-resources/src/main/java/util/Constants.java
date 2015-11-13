@@ -11,13 +11,13 @@ package ${package}.util;
  */
 public class Constants {
 
-    private Constants() {
-
-    }
-
     /**
      * Login page.
      */
     public static final String LOGIN_PAGE = "/pages/open/login.html";
+    
+    private Constants() {
+
+    }
 
 }

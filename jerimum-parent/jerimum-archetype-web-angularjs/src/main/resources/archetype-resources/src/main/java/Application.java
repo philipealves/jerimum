@@ -44,7 +44,7 @@ public class Application extends WebMvcConfigurerAdapter implements Initializing
     private static final long serialVersionUID = 7271156509131604941L;
 
     @Autowired
-    private Environment environment;
+    private transient Environment environment;
 
     @Autowired
     private ApplicationConfig appConfig;

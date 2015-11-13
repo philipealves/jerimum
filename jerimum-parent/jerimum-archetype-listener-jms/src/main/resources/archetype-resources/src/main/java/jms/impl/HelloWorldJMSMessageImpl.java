@@ -10,7 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import br.com.jerimum.fw.jms.impl.AbstractJMSMessageImpl;import ${package}.jms.HelloWorldMessage;
+import br.com.jerimum.fw.jms.impl.AbstractJMSMessageImpl;
+import ${package}.jms.HelloWorldJMSMessage;
 
 /**
  * Sample Hello World message gateway class to demonstrate jms messaging operations.
@@ -19,7 +20,7 @@ import br.com.jerimum.fw.jms.impl.AbstractJMSMessageImpl;import ${package}.jms.H
  * @since 11/2015
  */
 @Component
-public class HelloWorldJMSMessageImpl extends AbstractJMSMessageImpl implements HelloWorldMessage {
+public class HelloWorldJMSMessageImpl extends AbstractJMSMessageImpl implements HelloWorldJMSMessage {
 
     @Autowired
     @Qualifier("jmsConnectionFactory")

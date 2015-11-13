@@ -20,16 +20,11 @@ public class JerimumAspectLog {
 
     private static int sequence = 1;
 
-    /**
-     * 
-     * @param jp
-     * @throws Exception
-     */
     protected void logEntry(JoinPoint jp) throws Exception {
 
         Logger logger = JerimumAspectUtils.getLogger(jp);
         if (logger.isDebugEnabled()) {
-        	
+
             StringBuilder sb = new StringBuilder();
             sb.append("Entry --> ");
             sb.append(JerimumAspectUtils.methodName(jp));
@@ -40,35 +35,19 @@ public class JerimumAspectLog {
         }
     }
 
-    /**
-     * 
-     * @param jp
-     * @throws Exception
-     */
     protected void logExit(JoinPoint jp) throws Exception {
 
         Logger logger = JerimumAspectUtils.getLogger(jp);
         LoggerUtils.logDebug(logger, "Exit <-- " + JerimumAspectUtils.methodName(jp) + " - void");
     }
 
-    /**
-     * 
-     * @param jp
-     * @param returningValue
-     * @throws Exception
-     */
     protected void logExit(JoinPoint jp, Object returningValue) throws Exception {
 
         Logger logger = JerimumAspectUtils.getLogger(jp);
-        LoggerUtils.logDebug(logger, "Exit <-- " + JerimumAspectUtils.methodName(jp) + " - " + JerimumAspectUtils.displayObject(returningValue));
+        LoggerUtils.logDebug(logger,
+            "Exit <-- " + JerimumAspectUtils.methodName(jp) + " - " + JerimumAspectUtils.displayObject(returningValue));
     }
 
-    /**
-     * 
-     * @param jp
-     * @param ex
-     * @throws Throwable
-     */
     protected void logException(JoinPoint jp, Throwable ex) throws Throwable {
 
         String occurrenceId = nextOccurrenceId();
@@ -85,32 +64,26 @@ public class JerimumAspectLog {
 
             } else if (ex instanceof ValidationException) {
 
-                JerimumException fex = new JerimumException(ex.getMessage(), ex, new Date(), occurrenceId,
-                    methodName, jp.getThis(), jp.getArgs());
+                JerimumException fex = new JerimumException(ex.getMessage(), ex, new Date(), occurrenceId, methodName,
+                    jp.getThis(), jp.getArgs());
                 dumpException(fex, false, logger);
 
             } else {
 
-                JerimumException fex = new JerimumException(ex.getMessage(), ex, new Date(), occurrenceId,
-                    methodName, jp.getThis(), jp.getArgs());
+                JerimumException fex = new JerimumException(ex.getMessage(), ex, new Date(), occurrenceId, methodName,
+                    jp.getThis(), jp.getArgs());
                 dumpException(fex, true, logger);
             }
         }
 
         throw ex;
     }
-    
-    /**
-     * 
-     * @param fex
-     * @param appendRootCause
-     * @param logger
-     */
+
     protected void dumpException(JerimumException fex, boolean appendRootCause, Logger logger) {
 
         StringBuilder args = new StringBuilder();
         JerimumAspectUtils.appendArguments(fex.getArgs(), args);
-        
+
         StringBuilder dump = new StringBuilder();
         dump.append("# Identificador do erro: {} \n");
         dump.append("# Timestamp: {} \n");
@@ -121,7 +94,7 @@ public class JerimumAspectLog {
 
         String rootCauseString = null;
         if (appendRootCause) {
-        	Throwable rootCause = fex;
+            Throwable rootCause = fex;
             while (rootCause.getCause() != null) {
                 rootCause = rootCause.getCause();
             }
@@ -129,9 +102,10 @@ public class JerimumAspectLog {
             dump.append("# Exception Root Cause: {} \n");
         }
         dump.append("-");
-        LoggerUtils.logError(logger, dump.toString(), fex.getOccurrenceId(), fex.getTimeStamp(), fex.getMessage(), fex.getCurrent(), fex.getMethodName(), args, rootCauseString);
+        LoggerUtils.logError(logger, dump.toString(), fex.getOccurrenceId(), fex.getTimeStamp(), fex.getMessage(),
+            fex.getCurrent(), fex.getMethodName(), args, rootCauseString);
     }
-    
+
     /**
      * Returns the exception stack in {@link String} format.
      * 
@@ -157,7 +131,7 @@ public class JerimumAspectLog {
             return rootCauseStack.toString();
         }
     }
-    
+
     /**
      * Returns the next occurrence id.
      * 
@@ -166,6 +140,6 @@ public class JerimumAspectLog {
     protected static synchronized String nextOccurrenceId() {
         return String.valueOf(++sequence);
     }
-    
+
 }
 

@@ -26,11 +26,7 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
 
     protected JmsTemplate jmsTemplate;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
-     */
+    @Override
     public void afterPropertiesSet() throws Exception {
 
         LoggerUtils.logDebug(AbstractJMSMessageImpl.class, "Starting JMS message with JMSConnectionFactory: {}",
@@ -53,11 +49,7 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
         this.jmsTemplate.setReceiveTimeout(timeOut);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see br.com.scopus.fw.jms.JMSMessage#sendAndReceive(java.lang.String)
-     */
+    @Override
     public String sendAndReceive(String message) throws MessageException {
 
         if (StringUtils.isEmpty(message)) {
@@ -71,9 +63,7 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
 
             // RECUPERA A RESPOSTA
             String messageSelector = String.format("JMSCorrelationID='%s'", messageSent.getJMSMessageID());
-            String response = receiveTextMessage(messageSelector);
-
-            return response;
+            return receiveTextMessage(messageSelector);
 
         } catch (MessageException e) {
             LoggerUtils.logError(AbstractJMSMessageImpl.class, "Unable to send/receive message!", e);
@@ -98,9 +88,7 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
 
             // RECUPERA A RESPOSTA
             String messageSelector = String.format("JMSCorrelationID='%s'", messageSent.getJMSMessageID());
-            String response = receiveTextMessage(messageSelector);
-
-            return response;
+            return receiveTextMessage(messageSelector);
 
         } catch (MessageException e) {
             LoggerUtils.logError(AbstractJMSMessageImpl.class, "Unable to send/receive message!", e);
@@ -111,26 +99,19 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see br.com.scopus.fw.jms.JMSMessage#sendTextMessage(java.lang.String)
-     */
+    @Override
     public TextMessage sendTextMessage(final String msg) throws MessageException {
 
         return sendTextMessage(msg, getRequestQueue());
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see br.com.jerimum.fw.jms.JMSMessage#sendTextMessage(java.lang.String, java.lang.String)
-     */
+    @Override
     public TextMessage sendTextMessage(final String msg, final String correlationID) throws MessageException {
 
         try {
 
             JMSMessageCreator<TextMessage> messageCreator = new JMSMessageCreator<TextMessage>() {
+                @Override
                 public void setParams(TextMessage message) throws JMSException {
                     message.setText(msg);
                     message.setJMSCorrelationID(correlationID);
@@ -145,16 +126,13 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
 
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see br.com.scopus.fw.jms.JMSMessage#sendTextMessage(java.lang.String, javax.jms.Queue)
-     */
+    @Override
     public TextMessage sendTextMessage(final String msg, Queue queue) throws MessageException {
 
         try {
 
             JMSMessageCreator<TextMessage> messageCreator = new JMSMessageCreator<TextMessage>() {
+                @Override
                 public void setParams(TextMessage message) throws JMSException {
                     message.setText(msg);
                 }
@@ -167,22 +145,13 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see br.com.scopus.fw.jms.JMSMessage#sendMessage(br.com.scopus.fw.jms.JMSMessageCreator)
-     */
+    @Override
     public Message sendMessage(JMSMessageCreator<?> messageCreator) throws MessageException {
 
         return sendMessage(messageCreator, getRequestQueue());
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see br.com.scopus.fw.jms.JMSMessage#sendMessage(br.com.scopus.fw.jms.JMSMessageCreator,
-     * javax.jms.Queue)
-     */
+    @Override
     public Message sendMessage(JMSMessageCreator<?> messageCreator, Queue queue) throws MessageException {
 
         if (queue == null) {
@@ -202,21 +171,13 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see br.com.scopus.fw.jms.JMSMessage#receiveMessage(java.lang.String)
-     */
+    @Override
     public Message receiveMessage(String messageSelector) throws MessageException {
 
         return receiveMessage(messageSelector, getResponseQueue());
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see br.com.scopus.fw.jms.JMSMessage#receiveMessage(java.lang.String, javax.jms.Queue)
-     */
+    @Override
     public Message receiveMessage(String messageSelector, Queue queue) throws MessageException {
 
         if (messageSelector == null) {
@@ -256,10 +217,16 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
      * @throws JMSException
      * @throws MessageException
      */
-    public String receiveTextMessage(String messageSelector) throws JMSException, MessageException {
+    public String receiveTextMessage(String messageSelector) throws MessageException {
 
-        TextMessage receivedMessage = (TextMessage) receiveMessage(messageSelector);
-        return receivedMessage != null ? receivedMessage.getText() : null;
+        try {
+            
+            TextMessage receivedMessage = (TextMessage) receiveMessage(messageSelector);
+            return receivedMessage != null ? receivedMessage.getText() : null;
+            
+        } catch (Exception e) {
+            throw new MessageException(e);
+        }
     }
 
     /**
@@ -270,11 +237,10 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
      * @param maxMsgCount
      * @param totalTimeOut
      * @return {@link List}<Message>
-     * @throws JMSException
      * @throws MessageException
      */
     public List<Message> receiveMultipleMessages(String messageSelector, int maxMsgCount, long totalTimeOut)
-        throws JMSException, MessageException {
+        throws MessageException {
 
         if (messageSelector == null) {
             throw new MessageException("MessageSelector cannot be null!");
@@ -309,21 +275,26 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
      * @param maxMsgCount
      * @param totalTimeOut
      * @return {@link List}<String>
-     * @throws JMSException
      * @throws MessageException
      */
     public List<String> receiveMultipleTextMessages(String selector, int maxMsgCount, long totalTimeOut)
-        throws JMSException, MessageException {
+        throws MessageException {
 
         List<Message> messages = receiveMultipleMessages(selector, maxMsgCount, totalTimeOut);
 
-        List<String> textMessages = new ArrayList<String>();
-        for (Message response : messages) {
-            TextMessage txtMsg = (TextMessage) response;
-            textMessages.add(txtMsg.getText());
-        }
+        try {
 
-        return textMessages;
+            List<String> textMessages = new ArrayList<String>();
+            for (Message response : messages) {
+                TextMessage txtMsg = (TextMessage) response;
+                textMessages.add(txtMsg.getText());
+            }
+
+            return textMessages;
+
+        } catch (Exception e) {
+            throw new MessageException(e);
+        }
     }
 
 }

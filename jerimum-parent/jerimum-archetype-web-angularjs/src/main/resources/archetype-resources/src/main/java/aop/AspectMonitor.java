@@ -23,6 +23,7 @@ import br.com.jerimum.fw.aop.JerimumAspectMonitor;
 public class AspectMonitor extends JerimumAspectMonitor {
 
     @Around("${package}.aop.AspectPointcuts.controller()")
+    @Override
     protected Object monitor(ProceedingJoinPoint jp) throws Throwable {
         return super.monitor(jp);
     }
