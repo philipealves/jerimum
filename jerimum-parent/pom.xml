@@ -13,6 +13,7 @@
 		<module>jerimum-framework</module>
 		<module>jerimum-archetype-listener-jms</module>
 		<module>jerimum-archetype-web-angularjs</module>
+		<module>jerimum-archetype-data</module>
 	</modules>
 
 	<dependencyManagement>
