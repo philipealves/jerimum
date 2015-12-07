@@ -11,6 +11,7 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import br.com.jerimum.fw.logging.LoggerConfigurator;
 import br.com.jerimum.fw.logging.LoggerUtils;
 
 /**
@@ -19,53 +20,58 @@ import br.com.jerimum.fw.logging.LoggerUtils;
  * @since 10/2015
  */
 public abstract class JerimumWebApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
-	
-	@Override
-	protected Class<?>[] getRootConfigClasses() {
-		return new Class<?>[] {};
-	}
 
-	@Override
-	protected Class<?>[] getServletConfigClasses() {
-		return new Class<?>[] {};
-	}
+    @Override
+    protected Class<?>[] getRootConfigClasses() {
+        return new Class<?>[] {};
+    }
 
-	@Override
-	protected String[] getServletMappings() {
-		return new String[] { "/" };
-	}
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return new Class<?>[] {};
+    }
 
-	@Override
-	public void onStartup(ServletContext servletContext) throws ServletException {
+    @Override
+    protected String[] getServletMappings() {
+        return new String[] { "/" };
+    }
 
-		String jerimumEnvironmentPath = JerimumEnvironment.getEnvironment();
-		if (!JerimumEnvironment.isExternalEnvironment(jerimumEnvironmentPath)) {
-			jerimumEnvironmentPath = "classpath:META-INF/environment/" + jerimumEnvironmentPath + "/application.properties";
-		}
-		String logbackEnvironmentPath = StringUtils.remove(jerimumEnvironmentPath, "application.properties") + "logback.xml";
-		
-		String jerimumEnvironmentName = JerimumEnvironment.getEnvironment();
-		System.setProperty("spring.config.location", jerimumEnvironmentPath);
-                System.setProperty("logback.configurationFile", logbackEnvironmentPath);
-		System.setProperty(AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME, jerimumEnvironmentName);
-		System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, jerimumEnvironmentName);
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
 
-		LoggerUtils.logInfo(this.getClass(), "================================================================");
-		LoggerUtils.logInfo(this.getClass(), ".:  Starting Jerimum Application :.");
-		LoggerUtils.logInfo(this.getClass(), ".:  Application name: {} :.", servletContext.getServletContextName());
-		LoggerUtils.logInfo(this.getClass(), ".:  Environment: {} :.", jerimumEnvironmentName);
-		LoggerUtils.logInfo(this.getClass(), ".:  Logback file: {} :.", logbackEnvironmentPath);
+        String jerimumEnvironmentPath = JerimumEnvironment.getEnvironment();
+        String logbackConfigurationFile = StringUtils.replace(jerimumEnvironmentPath, "application.properties", "logback.xml");
+        if (!JerimumEnvironment.isExternalEnvironment(jerimumEnvironmentPath)) {
+            logbackConfigurationFile = getClass().getResource("/META-INF/environment/" + jerimumEnvironmentPath + "/logback.xml").getFile();
+            jerimumEnvironmentPath = "classpath:META-INF/environment/" + jerimumEnvironmentPath + "/application.properties";
+        }
 
-		servletContext.addListener(new RequestContextListener());
+        String jerimumEnvironmentName = JerimumEnvironment.getEnvironment();
+        System.setProperty("spring.config.location", jerimumEnvironmentPath);
+        System.setProperty("logback.configurationFile", logbackConfigurationFile);
+        System.setProperty("logging.config", logbackConfigurationFile);
+        System.setProperty(AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME, jerimumEnvironmentName);
+        System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, jerimumEnvironmentName);
 
-		ServletRegistration.Dynamic registration = servletContext.addServlet("dispatcher", new DispatcherServlet());
-		registration.setInitParameter("contextClass", AnnotationConfigWebApplicationContext.class.getName());
-		registration.setInitParameter("contextConfigLocation", getConfigurationClass().getName());
-		registration.setLoadOnStartup(1);
-		registration.addMapping("/rest/*");
-		
-	}
+        
+        new LoggerConfigurator(logbackConfigurationFile).configure();
+        
+        LoggerUtils.logInfo(this.getClass(), "================================================================");
+        LoggerUtils.logInfo(this.getClass(), ".:  Starting Jerimum Application :.");
+        LoggerUtils.logInfo(this.getClass(), ".:  Application name: {} :.", servletContext.getServletContextName());
+        LoggerUtils.logInfo(this.getClass(), ".:  Environment: {} :.", jerimumEnvironmentName);
+        LoggerUtils.logInfo(this.getClass(), ".:  Logback configuration file: {} :.", logbackConfigurationFile);
 
-	public abstract Class<?> getConfigurationClass();
+        servletContext.addListener(new RequestContextListener());
+
+        ServletRegistration.Dynamic registration = servletContext.addServlet("dispatcher", new DispatcherServlet());
+        registration.setInitParameter("contextClass", AnnotationConfigWebApplicationContext.class.getName());
+        registration.setInitParameter("contextConfigLocation", getConfigurationClass().getName());
+        registration.setLoadOnStartup(1);
+        registration.addMapping("/rest/*");
+
+    }
+
+    public abstract Class<?> getConfigurationClass();
 
 }
