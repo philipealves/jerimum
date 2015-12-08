@@ -164,7 +164,7 @@ public abstract class JerimumAspectUtils {
                 return m != null;
             }
         } catch (NoSuchMethodException e) {
-            LoggerUtils.logTrace(JerimumAspectUtils.class, "{} has not declared toString method", o.getClass().getSimpleName());
+            // Do nothing
         }
         return false;
     }
