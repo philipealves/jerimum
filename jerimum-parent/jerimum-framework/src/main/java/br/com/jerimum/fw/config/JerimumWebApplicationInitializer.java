@@ -45,11 +45,12 @@ public abstract class JerimumWebApplicationInitializer extends AbstractAnnotatio
             logbackConfigurationFile = getClass().getResource("/META-INF/environment/" + jerimumEnvironmentPath + "/logback.xml").getFile();
             jerimumEnvironmentPath = "classpath:META-INF/environment/" + jerimumEnvironmentPath + "/application.properties";
         }
+        String jerimumConfigurationFile = StringUtils.replace(logbackConfigurationFile, "logback.xml", "application.properties");
 
         String jerimumEnvironmentName = JerimumEnvironment.getEnvironment();
         System.setProperty("spring.config.location", jerimumEnvironmentPath);
         System.setProperty("logback.configurationFile", logbackConfigurationFile);
-        System.setProperty("logging.config", logbackConfigurationFile);
+        System.setProperty("jerimum.configurationFile", jerimumConfigurationFile);
         System.setProperty(AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME, jerimumEnvironmentName);
         System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, jerimumEnvironmentName);
 
@@ -60,6 +61,7 @@ public abstract class JerimumWebApplicationInitializer extends AbstractAnnotatio
         LoggerUtils.logInfo(this.getClass(), ".:  Starting Jerimum Application :.");
         LoggerUtils.logInfo(this.getClass(), ".:  Application name: {} :.", servletContext.getServletContextName());
         LoggerUtils.logInfo(this.getClass(), ".:  Environment: {} :.", jerimumEnvironmentName);
+        LoggerUtils.logInfo(this.getClass(), ".:  Jerimum configuration file: {} :.", jerimumConfigurationFile);
         LoggerUtils.logInfo(this.getClass(), ".:  Logback configuration file: {} :.", logbackConfigurationFile);
 
         servletContext.addListener(new RequestContextListener());
