@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rdthree.plenty.controller.RESTPaths;
-
 import br.com.jerimum.fw.i18n.I18nUtils;
 import ${package}.i18n.I18nKeys;
 import ${package}.util.Constants;
