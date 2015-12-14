@@ -2,8 +2,8 @@ package br.com.jerimum.fw.dao;
 
 import java.io.Serializable;
 
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import br.com.jerimum.fw.entity.AbstractEntity;
 
@@ -17,6 +17,6 @@ import br.com.jerimum.fw.entity.AbstractEntity;
  * @param <PK> Primary key type for related Entity.
  */
 @NoRepositoryBean
-public interface JpaCrudRepository<E extends AbstractEntity<?>, PK extends Serializable> extends CrudRepository<E, PK> {
+public interface JpaCrudRepository<E extends AbstractEntity<?>, PK extends Serializable> extends PagingAndSortingRepository<E, PK> {
 
 }
