@@ -1,8 +1,8 @@
 package br.com.jerimum.fw.service;
 
+import java.io.Serializable;
 import java.util.Set;
 
-import br.com.jerimum.fw.dto.AbstractDto;
 import br.com.jerimum.fw.entity.AbstractEntity;
 
 /**
@@ -13,7 +13,7 @@ import br.com.jerimum.fw.entity.AbstractEntity;
  * @param <DTO>
  * @param <ENTITY>
  */
-public interface CrudService<DTO extends AbstractDto, ENTITY extends AbstractEntity<?>> {
+public interface CrudService<DTO extends Serializable, ENTITY extends AbstractEntity<?>> {
 
     DTO getDtoById(Long id);
 

@@ -112,11 +112,13 @@
 			<id>nexus</id>
 			<name>Repositorio de Releases</name>
 			<url>http://172.16.140.132:8081/nexus/content/repositories/releases/</url>
+<!-- 			<url>http://srvtfsbld2:8084/nexus/content/repositories/releases/</url> -->
 		</repository>
 		<snapshotRepository>
 			<id>nexus</id>
 			<name>Repositorios de Snapshots</name>
 			<url>http://172.16.140.132:8081/nexus/content/repositories/snapshots/</url>
+<!-- 			<url>http://srvtfsbld2:8084/nexus/content/repositories/snapshots/</url> -->
 		</snapshotRepository>
 	</distributionManagement>
 	
@@ -126,6 +128,7 @@
 			<id>nexus</id>
 			<name>nexus</name>
 			<url>http://172.16.140.132:8081/nexus/content/groups/public/</url>
+<!-- 			<url>http://srvtfsbld2:8084/nexus/content/groups/public/</url> -->
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -157,6 +160,7 @@
 			<id>nexus</id>
 			<name>nexus</name>
 			<url>http://172.16.140.132:8081/nexus/content/groups/public/</url>
+<!-- 			<url>http://srvtfsbld2:8084/nexus/content/groups/public/</url> -->
 			<releases>
 				<enabled>true</enabled>
 			</releases>
