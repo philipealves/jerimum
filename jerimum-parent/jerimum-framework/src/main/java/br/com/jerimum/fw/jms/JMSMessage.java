@@ -17,18 +17,18 @@ import br.com.jerimum.fw.exception.MessageException;
 public interface JMSMessage {
 
     /**
-     * Retorna a fila de request.
+     * Retorna a fila que sera utilizada para escrita.
      * 
      * @return {@link Queue}
      */
-    Queue getRequestQueue();
+    Queue getWriteQueue();
 
     /**
-     * Retorna a fila de response.
+     * Retorna a fila que sera utilizada para leitura.
      * 
      * @return {@link Queue}
      */
-    Queue getResponseQueue();
+    Queue getReadQueue();
 
     /**
      * Retorna o {@link ConnectionFactory}.

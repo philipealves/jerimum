@@ -15,6 +15,12 @@ public class Constants {
      * Login page.
      */
     public static final String LOGIN_PAGE = "/pages/open/login.html";
+
+    /**
+     * Hello world rest service URL's.
+     */
+    public static final String HELLO_WORLD_CONTROLLER = "/helloworld";
+    public static final String HELLO_WORLD_SAMPLEGET = "/sampleget";
     
     private Constants() {
 

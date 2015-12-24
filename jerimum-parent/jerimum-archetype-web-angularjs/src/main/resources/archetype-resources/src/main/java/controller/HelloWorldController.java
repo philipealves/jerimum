@@ -13,9 +13,11 @@ import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.jerimum.fw.i18n.I18nUtils;
+import br.com.unipass.portalatendimento.util.Constants;
 import ${package}.i18n.I18nKeys;
 
 /**
@@ -30,12 +32,12 @@ public class HelloWorldController {
     @Autowired
     private MessageSource messageSource;
 
-    @RequestMapping("/user")
+    @RequestMapping(value = Constants.HELLO_WORLD_USER, method = RequestMethod.GET)
     public Principal user(Principal user) {
         return user;
     }
 
-    @RequestMapping("/resource")
+    @RequestMapping(value = Constants.HELLO_WORLD_RESOURCE, method = RequestMethod.GET)
     public Map<String, Object> home() {
 
         String helloWorldMessage = I18nUtils.getMsg(messageSource, I18nKeys.HelloWorldXxx.getKey(), getLoggedUsername());

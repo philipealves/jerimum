@@ -102,6 +102,11 @@
 		<maven.archetype.plugin>2.4</maven.archetype.plugin>
 		<maven.war.plugin>2.6</maven.war.plugin>
 		
+		
+		<ip.nexus>srvtfsbld2:8084</ip.nexus>
+<!-- 		<ip.nexus>172.16.140.132:8081</ip.nexus> -->
+<!-- 		<ip.nexus>172.16.140.67:8081</ip.nexus> -->
+
 	</properties>
 	
 	
@@ -111,14 +116,12 @@
 		<repository>
 			<id>nexus</id>
 			<name>Repositorio de Releases</name>
-			<url>http://172.16.140.132:8081/nexus/content/repositories/releases/</url>
-<!-- 			<url>http://srvtfsbld2:8084/nexus/content/repositories/releases/</url> -->
+			<url>http://${ip.nexus}/nexus/content/repositories/releases/</url>
 		</repository>
 		<snapshotRepository>
 			<id>nexus</id>
 			<name>Repositorios de Snapshots</name>
-			<url>http://172.16.140.132:8081/nexus/content/repositories/snapshots/</url>
-<!-- 			<url>http://srvtfsbld2:8084/nexus/content/repositories/snapshots/</url> -->
+			<url>http://${ip.nexus}/nexus/content/repositories/snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
 	
@@ -127,8 +130,7 @@
 		<repository>
 			<id>nexus</id>
 			<name>nexus</name>
-			<url>http://172.16.140.132:8081/nexus/content/groups/public/</url>
-<!-- 			<url>http://srvtfsbld2:8084/nexus/content/groups/public/</url> -->
+			<url>http://${ip.nexus}/nexus/content/groups/public/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -159,8 +161,7 @@
 		<pluginRepository>
 			<id>nexus</id>
 			<name>nexus</name>
-			<url>http://172.16.140.132:8081/nexus/content/groups/public/</url>
-<!-- 			<url>http://srvtfsbld2:8084/nexus/content/groups/public/</url> -->
+			<url>http://${ip.nexus}/nexus/content/groups/public/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>

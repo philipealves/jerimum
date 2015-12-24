@@ -84,7 +84,7 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
         try {
 
             // ENVIA A MENSAGEM
-            Message messageSent = sendMessage(messageCreator, getRequestQueue());
+            Message messageSent = sendMessage(messageCreator, getWriteQueue());
 
             // RECUPERA A RESPOSTA
             String messageSelector = String.format("JMSCorrelationID='%s'", messageSent.getJMSMessageID());
@@ -102,7 +102,7 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
     @Override
     public TextMessage sendTextMessage(final String msg) throws MessageException {
 
-        return sendTextMessage(msg, getRequestQueue());
+        return sendTextMessage(msg, getWriteQueue());
     }
 
     @Override
@@ -118,7 +118,7 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
                 }
             };
 
-            return (TextMessage) sendMessage(messageCreator, getRequestQueue());
+            return (TextMessage) sendMessage(messageCreator, getWriteQueue());
 
         } catch (Exception e) {
             throw new MessageException(e);
@@ -148,7 +148,7 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
     @Override
     public Message sendMessage(JMSMessageCreator<?> messageCreator) throws MessageException {
 
-        return sendMessage(messageCreator, getRequestQueue());
+        return sendMessage(messageCreator, getWriteQueue());
     }
 
     @Override
@@ -174,7 +174,7 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
     @Override
     public Message receiveMessage(String messageSelector) throws MessageException {
 
-        return receiveMessage(messageSelector, getResponseQueue());
+        return receiveMessage(messageSelector, getReadQueue());
     }
 
     @Override
@@ -246,7 +246,7 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
             throw new MessageException("MessageSelector cannot be null!");
         }
 
-        if (getResponseQueue() == null) {
+        if (getReadQueue() == null) {
             throw new MessageException("Response queue cannot be null!");
         }
 
