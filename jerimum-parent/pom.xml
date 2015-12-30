@@ -71,6 +71,10 @@
 		
 		<!-- apache -->
 		<apache.commons.lang.version>3.4</apache.commons.lang.version>
+		<apache.commons.collections.version>4.1</apache.commons.collections.version>
+		<apache.commons.beanutils.version>1.9.2</apache.commons.beanutils.version>
+		<apache.commons.io.version>2.4</apache.commons.io.version>
+		<apache.commons.codec.version>1.10</apache.commons.codec.version>
 
 		<!-- google -->
 		<google.guava.version>18.0</google.guava.version>  		
@@ -88,6 +92,8 @@
 		
 		<!-- junit -->
 		<junit.version>4.12</junit.version>
+		<hamcrest.version>2.0.0.0</hamcrest.version>
+		<jsonpath.version>2.1.0</jsonpath.version>
 		
 		<!-- mockito -->
 		<mockito.version>2.0.31-beta</mockito.version>

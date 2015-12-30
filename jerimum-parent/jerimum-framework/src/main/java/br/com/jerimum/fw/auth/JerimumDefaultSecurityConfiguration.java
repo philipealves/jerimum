@@ -1,6 +1,7 @@
 package br.com.jerimum.fw.auth;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -9,9 +10,12 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -28,39 +32,73 @@ import org.springframework.web.util.WebUtils;
 public abstract class JerimumDefaultSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	public static final String XSRF_TOKEN = "XSRF-TOKEN";
-	
+
 	/**
 	 * 
 	 * @param auth
 	 * @throws Exception
 	 */
 	protected abstract void configureGlobal(AuthenticationManagerBuilder auth) throws Exception;
-	
+
 	/**
+	 * Retorna uma string com o endereco relativo da pagina de login.
 	 * 
 	 * @return {@link String}
 	 */
 	protected abstract String getLoginPage();
 
 	/**
+	 * Retorna uma string com o endereco relativo da pagina de acesso negado.
+	 * 
+	 * @return {@link String}
+	 */
+	protected abstract String getAccessDeniedPage();
+
+	/**
+	 * Retorna um array com a lista dos recursos que nao necessitam de
+	 * autenticacao para que sejam acessados.
 	 * 
 	 * @return String[]
 	 */
 	protected abstract String[] getUnsecuredResources();
 
+	/**
+	 * Retorna um mapa onde a chave corresponde ao recurso a ser acessado e o
+	 * valor corresponde ao array de ROLES que permitem o acesso a esse recurso.
+	 * 
+	 * @return {@link Map}
+	 */
+	protected abstract Map<String, String[]> getAuthorities();
+
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers(getUnsecuredResources());
+	}
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		if (ArrayUtils.isEmpty(getUnsecuredResources())) {
-			http.httpBasic().and().authorizeRequests().anyRequest().authenticated().and().formLogin()
-					.loginPage(getLoginPage()).permitAll().and().logout().permitAll().and().csrf()
-					.csrfTokenRepository(csrfTokenRepository()).and()
-					.addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
-		} else {
-			http.httpBasic().and().authorizeRequests().antMatchers(getUnsecuredResources()).permitAll().anyRequest()
-					.authenticated().and().formLogin().loginPage(getLoginPage()).permitAll().and().logout().permitAll()
-					.and().csrf().csrfTokenRepository(csrfTokenRepository()).and()
-					.addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
+
+		http.httpBasic();
+
+		if (StringUtils.isNoneBlank(getAccessDeniedPage())) {
+			http.exceptionHandling().accessDeniedPage(getAccessDeniedPage()).and().authorizeRequests()
+					.antMatchers(getAccessDeniedPage()).permitAll();
 		}
+
+		if (ArrayUtils.isNotEmpty(getUnsecuredResources())) {
+			http.authorizeRequests().antMatchers(getUnsecuredResources()).permitAll();
+		}
+
+		Map<String, String[]> authorities = getAuthorities();
+		if (MapUtils.isNotEmpty(authorities)) {
+			for (String url : authorities.keySet()) {
+				http.authorizeRequests().antMatchers(url).hasAnyAuthority(authorities.get(url));
+			}
+		}
+
+		http.authorizeRequests().anyRequest().authenticated().and().formLogin().loginPage(getLoginPage()).permitAll()
+				.and().logout().permitAll().and().csrf().csrfTokenRepository(csrfTokenRepository()).and()
+				.addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
 	}
 
 	/**
@@ -96,5 +134,5 @@ public abstract class JerimumDefaultSecurityConfiguration extends WebSecurityCon
 		repository.setHeaderName("X-" + XSRF_TOKEN);
 		return repository;
 	}
-	
+
 }
