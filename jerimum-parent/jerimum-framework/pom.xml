@@ -41,6 +41,11 @@
 			<artifactId>commons-codec</artifactId>
 			<version>${apache.commons.codec.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity</artifactId>
+			<version>${apache.velocity.version}</version>
+		</dependency>
 				
 				
 		

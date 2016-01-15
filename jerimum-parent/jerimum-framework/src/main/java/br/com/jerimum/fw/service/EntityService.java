@@ -3,6 +3,7 @@ package br.com.jerimum.fw.service;
 import java.util.Set;
 
 import br.com.jerimum.fw.entity.AbstractEntity;
+import br.com.jerimum.fw.exception.ValidationException;
 
 /**
  * 
@@ -13,30 +14,12 @@ import br.com.jerimum.fw.entity.AbstractEntity;
  */
 public interface EntityService<ENTITY extends AbstractEntity<?>> {
 
-	/**
-	 * 
-	 * @param id
-	 * @return
-	 */
 	public ENTITY getEntityById(Long id);
-	
-	/**
-	 * 
-	 * @param entity
-	 * @return
-	 */
-	public ENTITY saveEntity(ENTITY entity);
 
-	/**
-	 * 
-	 * @param id
-	 */
+	public ENTITY saveEntity(ENTITY entity) throws ValidationException;
+
 	public void deleteEntityById(Long id);
 
-	/**
-	 * 
-	 * @return
-	 */
 	public Set<ENTITY> getAllEntities();
-	
+
 }
