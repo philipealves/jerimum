@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>br.com.jerimum</groupId>
 		<artifactId>jerimum-parent</artifactId>
-		<version>${jerimum.version}</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 	
 	
