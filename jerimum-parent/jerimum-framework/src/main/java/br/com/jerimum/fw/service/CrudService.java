@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 import br.com.jerimum.fw.entity.AbstractEntity;
+import br.com.jerimum.fw.exception.ValidationException;
 
 /**
  * 
@@ -15,14 +16,14 @@ import br.com.jerimum.fw.entity.AbstractEntity;
  */
 public interface CrudService<DTO extends Serializable, ENTITY extends AbstractEntity<?>> {
 
-    DTO getDtoById(Long id);
+	DTO getDtoById(Long id);
 
-    DTO insertDto(DTO dto);
+	DTO insertDto(DTO dto) throws ValidationException;
 
-    DTO updateDto(DTO dto);
+	DTO updateDto(DTO dto) throws ValidationException;
 
-    void deleteDtoById(Long id);
+	void deleteDtoById(Long id);
 
-    Set<DTO> getAllDtos();
+	Set<DTO> getAllDtos();
 
 }

@@ -9,6 +9,7 @@ import java.util.Set;
 
 import br.com.jerimum.fw.dao.JpaCrudRepository;
 import br.com.jerimum.fw.entity.AbstractEntity;
+import br.com.jerimum.fw.exception.ValidationException;
 import br.com.jerimum.fw.service.CrudService;
 
 /**
@@ -36,14 +37,14 @@ public abstract class AbstractCrudService<DTO extends Serializable, ENTITY exten
 	}
 
 	@Override
-	public DTO insertDto(DTO dto) {
+	public DTO insertDto(DTO dto) throws ValidationException {
 		ENTITY entity = buildEntityFromDto(dto);
-		getRepository().save(entity);
+		saveEntity(entity);
 		return buildDtoFromEntity(entity);
 	}
 
 	@Override
-	public DTO updateDto(DTO dto) {
+	public DTO updateDto(DTO dto) throws ValidationException {
 		ENTITY entity = buildEntityFromDto(dto);
 		entity = saveEntity(entity);
 		return buildDtoFromEntity(entity);
@@ -111,5 +112,4 @@ public abstract class AbstractCrudService<DTO extends Serializable, ENTITY exten
 	private Class<ENTITY> getEntityClass() {
 		return (Class<ENTITY>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
 	}
-
 }
