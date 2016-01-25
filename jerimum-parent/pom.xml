@@ -66,6 +66,7 @@
 		<!-- hibernate -->
 		<hibernate.version>5.0.7.Final</hibernate.version>
 		<hibernate.validator.version>5.2.2.Final</hibernate.validator.version>
+		<javax.expression.language.version>2.2.4</javax.expression.language.version>
 		
 		<!-- aspectj -->
 		<aspectj.version>1.8.7</aspectj.version>
