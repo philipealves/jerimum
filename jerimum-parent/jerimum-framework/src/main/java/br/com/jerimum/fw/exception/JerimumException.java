@@ -6,9 +6,9 @@ import java.util.Date;
 import lombok.Getter;
 
 /**
+ * Generic exception.
  * 
  * @author Dali Freire - dalifreire@gmail.com
- * @since 10/2015
  */
 public class JerimumException extends RuntimeException {
 

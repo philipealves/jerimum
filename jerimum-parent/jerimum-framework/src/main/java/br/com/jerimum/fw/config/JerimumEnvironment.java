@@ -7,9 +7,14 @@ import org.apache.commons.lang3.StringUtils;
 import br.com.jerimum.fw.logging.LoggerUtils;
 
 /**
+ * Utility class to manage environments of the application. <br/>
+ * The environment types are: <br/>
+ * <ul>
+ *      <li>jerimum.internal.environment.config</li>
+ *      <li>jerimum.external.environment.config</li>
+ * <ul>
  * 
  * @author Dali Freire - dalifreire@gmail.com
- * @since 10/2015
  */
 public final class JerimumEnvironment {
 

@@ -12,10 +12,16 @@ import br.com.jerimum.fw.logging.LoggerUtils;
  * Aspect for application monitoring.
  * 
  * @author Dali Freire - dalifreire@gmail.com
- * @since 10/2015
  */
 public class JerimumAspectMonitor {
-	
+
+    /**
+     * Stores the monitor values for the pointcut.
+     * 
+     * @param jp
+     * @return {@link Object}
+     * @throws Throwable
+     */
     protected Object monitor(ProceedingJoinPoint jp) throws Throwable {
 
         Logger logger = JerimumAspectUtils.getLogger(jp);
@@ -26,7 +32,8 @@ public class JerimumAspectMonitor {
                 retVal = jp.proceed();
             } finally {
                 monitor.stop();
-                LoggerUtils.logTrace(logger, "-- " + JerimumAspectUtils.methodName(jp) + ": " + JerimumAspectMonitor.getMonitorValues(monitor));
+                LoggerUtils.logTrace(logger,
+                    "-- " + JerimumAspectUtils.methodName(jp) + ": " + JerimumAspectMonitor.getMonitorValues(monitor));
             }
         } else {
             retVal = jp.proceed();
@@ -34,6 +41,12 @@ public class JerimumAspectMonitor {
         return retVal;
     }
 
+    /**
+     * Returns an {@link StringBuilder} with the stored monitor values.
+     * 
+     * @param monitor
+     * @return {@link StringBuilder}
+     */
     protected static StringBuilder getMonitorValues(Monitor monitor) {
         StringBuilder sb = new StringBuilder();
         sb.append("Hits=").append(monitor.getHits()).append(", ");

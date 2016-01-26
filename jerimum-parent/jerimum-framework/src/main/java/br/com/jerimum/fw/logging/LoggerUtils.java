@@ -10,8 +10,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Utility class for logs.
  * 
- * @author Dali Freire: dalifreire@gmail.com
- * @since 10/2015
+ * @author Dali Freire - dalifreire@gmail.com
  */
 public class LoggerUtils {
 

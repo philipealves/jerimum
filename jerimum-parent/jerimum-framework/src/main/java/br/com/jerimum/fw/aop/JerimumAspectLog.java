@@ -12,14 +12,20 @@ import br.com.jerimum.fw.exception.ValidationException;
 import br.com.jerimum.fw.logging.LoggerUtils;
 
 /**
+ * Aspect help to logs.
  * 
  * @author Dali Freire - dalifreire@gmail.com
- * @since 10/2015
  */
 public class JerimumAspectLog {
 
     private static int sequence = 1;
 
+    /**
+     * Logs the entry of the method.
+     * 
+     * @param jp
+     * @throws Exception
+     */
     protected void logEntry(JoinPoint jp) throws Exception {
 
         Logger logger = JerimumAspectUtils.getLogger(jp);
@@ -35,12 +41,25 @@ public class JerimumAspectLog {
         }
     }
 
+    /**
+     * Logs the exit of the method (void type).
+     * 
+     * @param jp
+     * @throws Exception
+     */
     protected void logExit(JoinPoint jp) throws Exception {
 
         Logger logger = JerimumAspectUtils.getLogger(jp);
         LoggerUtils.logDebug(logger, "Exit <-- " + JerimumAspectUtils.methodName(jp) + " - void");
     }
 
+    /**
+     * Logs the exit of the method.
+     * 
+     * @param jp
+     * @param returningValue
+     * @throws Exception
+     */
     protected void logExit(JoinPoint jp, Object returningValue) throws Exception {
 
         Logger logger = JerimumAspectUtils.getLogger(jp);
@@ -48,13 +67,20 @@ public class JerimumAspectLog {
             "Exit <-- " + JerimumAspectUtils.methodName(jp) + " - " + JerimumAspectUtils.displayObject(returningValue));
     }
 
+    /**
+     * Logs the exception that occurred in the method.
+     * 
+     * @param jp
+     * @param ex
+     * @throws Throwable
+     */
     protected void logException(JoinPoint jp, Throwable ex) throws Throwable {
 
         String occurrenceId = nextOccurrenceId();
         String methodName = JerimumAspectUtils.methodName(jp);
 
         Logger logger = JerimumAspectUtils.getLogger(jp);
-        LoggerUtils.logError(logger, "Exit <-- {} - EXCEPTION [{}] {}", methodName, occurrenceId, ex.getMessage());
+        LoggerUtils.logError(logger, "Exit <-- {} - NEW EXCEPTION [{}] {}", methodName, occurrenceId, ex.getMessage());
 
         if (logger.isErrorEnabled()) {
             if (ex instanceof JerimumException) {
@@ -79,18 +105,25 @@ public class JerimumAspectLog {
         throw ex;
     }
 
+    /**
+     * Logs he exception stack trace.
+     * 
+     * @param fex
+     * @param appendRootCause
+     * @param logger
+     */
     protected void dumpException(JerimumException fex, boolean appendRootCause, Logger logger) {
 
         StringBuilder args = new StringBuilder();
         JerimumAspectUtils.appendArguments(fex.getArgs(), args);
 
         StringBuilder dump = new StringBuilder();
-        dump.append("# Identificador do erro: {} \n");
+        dump.append("# Error ID: {} \n");
         dump.append("# Timestamp: {} \n");
-        dump.append("# Mensagem de erro: {} \n");
+        dump.append("# Error message: {} \n");
         dump.append("# Service: {} \n");
-        dump.append("# Metodo: {} \n");
-        dump.append("# Argumentos: ({}) \n");
+        dump.append("# Method: {} \n");
+        dump.append("# Arguments: ({}) \n");
 
         String rootCauseString = null;
         if (appendRootCause) {

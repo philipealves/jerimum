@@ -3,9 +3,13 @@
 #set($symbol_escape='\')
 package ${package};
 
+import java.io.File;
+
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.validator.HibernateValidator;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -27,21 +31,23 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
+import br.com.jerimum.fw.config.JerimumEnvironment;
+import br.com.jerimum.fw.logging.LoggerConfigurator;
 import br.com.jerimum.fw.logging.LoggerUtils;
-import ${package}.data.config.ApplicationConfig;
-import ${package}.data.config.ApplicationConfigDatabase;
+import ${package}.config.ApplicationConfig;
+import ${package}.config.ApplicationConfigDatabase;
 import junit.framework.TestCase;
 
 /**
- * Aspect to intercept and log application methods.
+ * Base configuration class for repository tests.
  * 
  * @author https://github.com/dalifreire/jerimum
- * @since 12/2015
  */
 @Configuration
 @ComponentScan(basePackages = { "${basePackages}.data.aop", "${basePackages}.data.dao", "${basePackages}.data.entity",
-"${basePackages}.data.config" })
+"${basePackages}.config" })
 @EnableTransactionManagement
 @EnableJpaRepositories
 @ContextConfiguration(classes = { RepositoryTestContext.class })
@@ -54,13 +60,22 @@ public class RepositoryTestContext extends TestCase implements InitializingBean 
 
     {
         String jerimumEnvironmentPath = "classpath:META-INF/environment/" + DEFAULT_TEST_ENVIRONMENT + "/application.properties";
+        String logbackConfigurationFile = new File(System.getProperty("user.dir") + "/src/main/resources/META-INF/environment/" + DEFAULT_TEST_ENVIRONMENT + "/logback.xml").getAbsolutePath();
+        String jerimumConfigurationFile = StringUtils.replace(logbackConfigurationFile, "logback.xml", "application.properties");
+        String jerimumEnvironmentName = JerimumEnvironment.getEnvironment();
         System.setProperty("spring.config.location", jerimumEnvironmentPath);
-        System.setProperty(AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME, DEFAULT_TEST_ENVIRONMENT);
-        System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, DEFAULT_TEST_ENVIRONMENT);
+        System.setProperty("logback.configurationFile", logbackConfigurationFile);
+        System.setProperty("jerimum.configurationFile", jerimumConfigurationFile);
+        System.setProperty(AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME, jerimumEnvironmentName);
+        System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, jerimumEnvironmentName);
+
+        new LoggerConfigurator(logbackConfigurationFile).configure();
 
         LoggerUtils.logInfo(this.getClass(), "================================================================");
         LoggerUtils.logInfo(this.getClass(), ".:  Starting Jerimum Application :.");
-        LoggerUtils.logInfo(this.getClass(), ".:  Environment: {} :.", DEFAULT_TEST_ENVIRONMENT);
+        LoggerUtils.logInfo(this.getClass(), ".:  Environment: {} :.", jerimumEnvironmentName);
+        LoggerUtils.logInfo(this.getClass(), ".:  Jerimum configuration file: {} :.", jerimumConfigurationFile);
+        LoggerUtils.logInfo(this.getClass(), ".:  Logback configuration file: {} :.", logbackConfigurationFile);
     }
 
 
@@ -78,6 +93,21 @@ public class RepositoryTestContext extends TestCase implements InitializingBean 
         } else {
             LoggerUtils.logInfo(this.getClass(), "Active Spring Profiles: {}", (Object[]) profiles);
         }
+    }
+
+    /**
+     * Creates a dummy string with the specified length.
+     * 
+     * @param length
+     * @return {@link String}
+     */
+    public static String createStringWithLength(int length) {
+
+        StringBuilder builder = new StringBuilder();
+        for (int index = 0; index < length; index++) {
+            builder.append("a");
+        }
+        return builder.toString();
     }
 
     @Bean
@@ -143,5 +173,17 @@ public class RepositoryTestContext extends TestCase implements InitializingBean 
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasenames("i18n\\messages");
         return messageSource;
+    }
+
+    @Bean
+    public LocalValidatorFactoryBean validatorFactory() {
+        LocalValidatorFactoryBean validatorFactory = new LocalValidatorFactoryBean();
+        validatorFactory.setProviderClass(HibernateValidator.class);
+        return validatorFactory;
+    }
+
+    @Bean
+    public JpaTestHelper jpaTestHelper() {
+        return new JpaTestHelper();
     }
 }

@@ -9,7 +9,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * Abstract class for all Data Transfer Objects.
  * 
  * @author Dali Freire Dias - dalifreire@gmail.com
- * @since 11/2015
  */
 public abstract class AbstractDto implements Serializable {
 

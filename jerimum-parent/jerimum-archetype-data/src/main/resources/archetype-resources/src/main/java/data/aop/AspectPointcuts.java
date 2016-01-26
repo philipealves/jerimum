@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
  * Application pointcut definitions.
  * 
  * @author https://github.com/dalifreire/jerimum
- * @since 10/2015
  */
 @Aspect
 @Component

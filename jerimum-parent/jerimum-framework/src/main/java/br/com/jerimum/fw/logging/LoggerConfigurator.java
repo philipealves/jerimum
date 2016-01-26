@@ -9,6 +9,10 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.util.StatusPrinter;
 
+/**
+ * 
+ * @author Dali Freire - dalifreire@gmail.com
+ */
 public class LoggerConfigurator {
 
     private String logbackConfigurationFile;
@@ -34,8 +38,7 @@ public class LoggerConfigurator {
 
         } catch (Exception e) {
             BasicConfigurator.configure(context);
-            LoggerUtils.logError(this.getClass(),
-                "Falha oa configurar logback, utilizando configuracao BasicConfigurator...", e);
+            LoggerUtils.logError(this.getClass(), "Error on configuring logback, BasicConfigurator will be used...", e);
         }
         StatusPrinter.printInCaseOfErrorsOrWarnings(context);
     }

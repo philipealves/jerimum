@@ -4,7 +4,6 @@ package br.com.jerimum.fw.exception;
  * Exception class for services.
  * 
  * @author Dali Freire: dalifreire@gmail.com
- * @since 11/2015
  */
 public class ServiceException extends Exception {
 
