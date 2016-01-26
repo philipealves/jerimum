@@ -9,8 +9,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * Abstract class for all entities. All entities must be extends this class.
  * 
  * @author Dali Freire Dias - dalifreire@gmail.com
- * @since 11/2015
- * 
  * @param <T> Primary key type.
  */
 public abstract class AbstractEntity<T extends Serializable> implements Serializable {

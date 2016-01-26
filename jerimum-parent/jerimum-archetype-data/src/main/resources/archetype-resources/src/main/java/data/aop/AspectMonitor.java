@@ -15,7 +15,6 @@ import br.com.jerimum.fw.aop.JerimumAspectMonitor;
  * Aspect for application monitoring.
  * 
  * @author https://github.com/dalifreire/jerimum
- * @since 10/2015
  */
 @Aspect
 @Component

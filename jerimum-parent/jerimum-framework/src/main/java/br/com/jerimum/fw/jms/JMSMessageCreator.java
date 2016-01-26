@@ -17,10 +17,9 @@ import org.springframework.jms.core.MessageCreator;
 import lombok.Getter;
 
 /**
+ * Utility jms message creator class.
  * 
  * @author Dali Freire - dalifreire@gmail.com
- * @since 11/2015
- * 
  * @param <T>
  */
 public abstract class JMSMessageCreator<T extends Message> implements MessageCreator {

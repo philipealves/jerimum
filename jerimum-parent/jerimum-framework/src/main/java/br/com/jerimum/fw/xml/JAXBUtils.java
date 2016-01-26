@@ -26,7 +26,6 @@ import org.xml.sax.SAXException;
  * Classe utilitaria responsavel por operacoes de convercao XML/Object.
  * 
  * @author Dali Freire - dalifreire@gmail.com
- * @since 11/2015
  */
 public final class JAXBUtils {
 

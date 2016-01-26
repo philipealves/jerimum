@@ -12,10 +12,10 @@ import ${package}.data.entity.HelloWorld;
 
 /**
  * Repository for operations on {@link HelloWorld} entity.
- * @see https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods
  * 
+ * @see https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods
+ * @see http://docs.spring.io/spring-data/data-commons/docs/current/reference/html/#repositories
  * @author https://github.com/dalifreire/jerimum
- * @since 11/2015
  */
 @Repository
 public interface HelloWorldRepository extends JpaCrudRepository<HelloWorld, Long> {

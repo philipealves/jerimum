@@ -9,29 +9,28 @@ import br.com.jerimum.fw.exception.MessageException;
 
 
 /**
- * Gateway utilizado para a comunicacao com as filas de mensagens via JMS.
+ * Gateway used for JMS messaging.
  * 
  * @author Dali Freire - dalifreire@gmail.com
- * @since 11/2015
  */
 public interface JMSMessage {
 
     /**
-     * Retorna a fila que sera utilizada para escrita.
+     * Returns the default queue that will be used to write messages.
      * 
      * @return {@link Queue}
      */
     Queue getWriteQueue();
 
     /**
-     * Retorna a fila que sera utilizada para leitura.
+     * Returns the deafult queue that will be used to read messages.
      * 
      * @return {@link Queue}
      */
     Queue getReadQueue();
 
     /**
-     * Retorna o {@link ConnectionFactory}.
+     * Returns the {@link ConnectionFactory}.
      * 
      * @return {@link ConnectionFactory}
      */
@@ -45,7 +44,7 @@ public interface JMSMessage {
     long getTimeout();
 
     /**
-     * Posta na fila de request a mensagem passada como parametro retornando a mensagem postada.
+     * Puts a new message into the write queue.
      * 
      * @param messageCreator
      * @return {@link Message}
@@ -54,7 +53,7 @@ public interface JMSMessage {
     Message sendMessage(JMSMessageCreator<?> messageCreator) throws MessageException;
 
     /**
-     * Posta na fila a mensagem passada como parametro retornando a mensagem postada.
+     * Puts a new message into the queue.
      * 
      * @param messageCreator
      * @param queue
@@ -64,14 +63,14 @@ public interface JMSMessage {
     Message sendMessage(JMSMessageCreator<?> messageCreator, Queue queue) throws MessageException;
 
     /**
-     * Envia a mensagem passada como parametro recuperando a mensagem de resposta.
+     * Puts a new message into the write queue and waits a response from the read queue.
      * 
      * @param message >> Mensagem que sera postada na fila de request.
      * @return {@link String} >> Mensagem de resposta.
      * @throws MessageException
      */
     String sendAndReceive(String message) throws MessageException;
-    
+
     /**
      * Envia a mensagem passada como parametro recuperando a mensagem de resposta.
      * 

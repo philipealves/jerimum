@@ -17,7 +17,6 @@ import br.com.jerimum.fw.aop.JerimumAspectLog;
  * Aspect to intercept and log application methods.
  * 
  * @author https://github.com/dalifreire/jerimum
- * @since 10/2015
  */
 @Aspect
 @Component

@@ -13,9 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * 
  * @author Dali Freire - dalifreire@gmail.com
- * @since 10/2015
  */
 @Data
 @EqualsAndHashCode
