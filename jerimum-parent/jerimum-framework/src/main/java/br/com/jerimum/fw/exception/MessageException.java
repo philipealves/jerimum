@@ -4,7 +4,6 @@ package br.com.jerimum.fw.exception;
  * Exception class for jms messaging operations.
  * 
  * @author Dali Freire - dalifreire@gmail.com
- * @since 10/2015
  */
 public class MessageException extends Exception {
 

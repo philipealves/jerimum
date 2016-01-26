@@ -3,6 +3,13 @@
 #set($symbol_escape='\')
 package ${package}.data.dao;
 
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +18,15 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-import ${package}.data.RepositoryTestContext;
+import ${package}.RepositoryTestContext;
 import ${package}.data.entity.HelloWorld;
 
 /**
  * JUnit test class for HelloWorldRepository.
  * 
  * @author https://github.com/dalifreire/jerimum
- * @since 12/2015
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -29,6 +36,15 @@ public class TestHelloWorldRepository extends RepositoryTestContext {
 
     @Autowired
     private HelloWorldRepository helloWorldRepository;
+    
+    @Autowired
+    private LocalValidatorFactoryBean validatorFactoryBean;
+    private static Validator validator;
+
+    @Before
+    public void setUp() {
+        validator = validatorFactoryBean.getValidator();
+    }
 
     /**
      * Test the CRUD functionality, relevant for all entities.
@@ -66,6 +82,37 @@ public class TestHelloWorldRepository extends RepositoryTestContext {
         helloWorld = helloWorldRepository.findOne(helloWorld.getPK());
         assertNull(helloWorld);
 
+    }
+    
+    @Test
+    public void testValidateFields() {
+
+        HelloWorld helloWorld = new HelloWorld();
+        helloWorld.setName("name helloWorld");
+        
+        /*
+         * all fields are correctly filled
+         */
+        Set<ConstraintViolation<HelloWorld>> constraintViolations = validator.validate(helloWorld);
+        Assert.assertEquals(0, constraintViolations.size());
+
+        /*
+         * The name field is mandatory
+         */
+        helloWorld.setName(null);
+        constraintViolations = validator.validate(helloWorld);
+        Assert.assertEquals(1, constraintViolations.size());
+        Assert.assertEquals("name", constraintViolations.iterator().next().getPropertyPath().toString());
+
+        /*
+         * The minimum size for the field name has been exceeded
+         */
+        helloWorld.setName(createStringWithLength(151));
+        constraintViolations = validator.validate(helloWorld);
+        Assert.assertEquals(1, constraintViolations.size());
+        Assert.assertEquals("name", constraintViolations.iterator().next().getPropertyPath().toString());
+        helloWorld.setName("name helloWorld");
+        
     }
 
 }

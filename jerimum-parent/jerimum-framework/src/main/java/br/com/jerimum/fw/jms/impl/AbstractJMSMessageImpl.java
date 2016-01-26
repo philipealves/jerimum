@@ -20,7 +20,6 @@ import br.com.jerimum.fw.logging.LoggerUtils;
 /**
  * 
  * @author Dali Freire - dalifreire@gmail.com
- * @since 11/2015
  */
 public abstract class AbstractJMSMessageImpl implements JMSMessage, InitializingBean {
 
@@ -41,7 +40,7 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
     }
 
     /**
-     * Configura o timeout para o recebimento das mensagens.
+     * Sets the timeout for receive messages.
      * 
      * @param timeOut
      */
@@ -58,10 +57,14 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
 
         try {
 
-            // ENVIA A MENSAGEM
+            /*
+             * sends the message
+             */
             Message messageSent = sendTextMessage(message);
 
-            // RECUPERA A RESPOSTA
+            /*
+             * receives the response
+             */
             String messageSelector = String.format("JMSCorrelationID='%s'", messageSent.getJMSMessageID());
             return receiveTextMessage(messageSelector);
 
@@ -83,10 +86,14 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
 
         try {
 
-            // ENVIA A MENSAGEM
+            /*
+             * sends the message
+             */
             Message messageSent = sendMessage(messageCreator, getWriteQueue());
 
-            // RECUPERA A RESPOSTA
+            /*
+             * receives the response
+             */
             String messageSelector = String.format("JMSCorrelationID='%s'", messageSent.getJMSMessageID());
             return receiveTextMessage(messageSelector);
 
@@ -220,10 +227,10 @@ public abstract class AbstractJMSMessageImpl implements JMSMessage, Initializing
     public String receiveTextMessage(String messageSelector) throws MessageException {
 
         try {
-            
+
             TextMessage receivedMessage = (TextMessage) receiveMessage(messageSelector);
             return receivedMessage != null ? receivedMessage.getText() : null;
-            
+
         } catch (Exception e) {
             throw new MessageException(e);
         }

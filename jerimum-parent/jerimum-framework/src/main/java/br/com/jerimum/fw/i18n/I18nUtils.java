@@ -15,21 +15,21 @@ import br.com.jerimum.fw.logging.LoggerUtils;
  * Utility class to manage internationalization message files.
  * 
  * @author Dali Freire Dias - dalifreire@gmail.com
- * @since 11/2015
  */
 public abstract class I18nUtils {
 
     public static final String BUNDLE_FW = "br.com.jerimum.i18n.jerimum-messages";
     public static final String SUFIX_UNDEFINED = "_UNDEFINED";
     private static final String DEFAULT_FAIL_MSG = "Unable to get message in the bundle!";
-    
-    
+
+
     private I18nUtils() {
 
     }
 
     /**
-     * Returns the {@link ResourceBundle} for the properties file passed as parameter. Throws a {@link MissingResourceException} if file not found.
+     * Returns the {@link ResourceBundle} for the properties file passed as parameter. Throws a
+     * {@link MissingResourceException} if file not found.
      * 
      * @param absolutePathToFile
      * @return {@link ResourceBundle}
@@ -44,7 +44,7 @@ public abstract class I18nUtils {
         } catch (MissingResourceException e) {
 
             try {
-            	LoggerUtils.logError(I18nUtils.class, "getBundle (1)", e);
+                LoggerUtils.logError(I18nUtils.class, "getBundle (1)", e);
                 return ResourceBundle.getBundle(StringUtils.substringAfterLast(absolutePathToFile, "."));
             } catch (MissingResourceException ex) {
                 LoggerUtils.logError(I18nUtils.class, "getBundle (2)", e);
@@ -76,9 +76,9 @@ public abstract class I18nUtils {
      */
     public static String getMsg(ResourceBundle bundle, String key) {
 
-        return getMsg(bundle, key, new Object[]{});
+        return getMsg(bundle, key, new Object[] {});
     }
-    
+
     /**
      * Returns the internationalized message by key.
      * 
@@ -96,7 +96,7 @@ public abstract class I18nUtils {
             mensagem = MessageFormat.format(bundle.getString(key), arguments);
 
         } catch (MissingResourceException e) {
-        	LoggerUtils.logError(I18nUtils.class, DEFAULT_FAIL_MSG, e);
+            LoggerUtils.logError(I18nUtils.class, DEFAULT_FAIL_MSG, e);
             mensagem = key.concat(SUFIX_UNDEFINED);
         } catch (Exception e) {
             LoggerUtils.logError(I18nUtils.class, DEFAULT_FAIL_MSG, e);
@@ -123,37 +123,37 @@ public abstract class I18nUtils {
     /**
      * Returns the internationalized message by key.
      * 
-     * @param messageSource - Arquivo de propriedade onde a mensagem sera buscada.
-     * @param key - Chave de cadastro da mensagem
+     * @param messageSource - Messages properties file.
+     * @param key - Message key.
      * @return {@link String}
      */
     public static String getMsg(MessageSource messageSource, String key) {
 
-        return getMsg(messageSource, key, new Object[]{});
+        return getMsg(messageSource, key, new Object[] {});
     }
 
     /**
      * Returns the internationalized message by key.
      * 
-     * @param messageSource - Arquivo de propriedade onde a mensagem sera buscada.
-     * @param chave - Chave de cadastro da mensagem
-     * @param arguments - Argumentos utilizados para completar a mensagem
+     * @param messageSource - Messages properties file.
+     * @param key - Message key.
+     * @param arguments - Message params.
      * @return {@link String}
      */
-    public static String getMsg(MessageSource messageSource, String chave, Object... arguments) {
+    public static String getMsg(MessageSource messageSource, String key, Object... arguments) {
 
         String mensagem = null;
-        
+
         try {
-            
-            mensagem = messageSource.getMessage(chave, arguments, Locale.getDefault());
-            
+
+            mensagem = messageSource.getMessage(key, arguments, Locale.getDefault());
+
         } catch (NoSuchMessageException e) {
             LoggerUtils.logError(I18nUtils.class, DEFAULT_FAIL_MSG, e);
-            mensagem = chave.concat(SUFIX_UNDEFINED);
+            mensagem = key.concat(SUFIX_UNDEFINED);
         } catch (Exception e) {
             LoggerUtils.logError(I18nUtils.class, DEFAULT_FAIL_MSG, e);
-            mensagem = chave.concat(SUFIX_UNDEFINED);
+            mensagem = key.concat(SUFIX_UNDEFINED);
         }
         return mensagem;
     }

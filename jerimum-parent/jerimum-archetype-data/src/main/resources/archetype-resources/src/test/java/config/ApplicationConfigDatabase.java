@@ -1,7 +1,7 @@
 #set($symbol_pound='#')
 #set($symbol_dollar='$')
 #set($symbol_escape='\')
-package ${package}.data.config;
+package ${package}.config;
 
 import java.io.Serializable;
 
@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
  * Database properties configuration.
  * 
  * @author https://github.com/dalifreire/jerimum
- * @since 12/2015
  */
 @Data
 @NoArgsConstructor
