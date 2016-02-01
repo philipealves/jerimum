@@ -196,6 +196,18 @@
 		    <version>${servlet.api.version}</version>
 		</dependency>
 		
+		<!-- json -->
+        <dependency>
+            <groupId>net.sf.flexjson</groupId>
+            <artifactId>flexjson</artifactId>
+            <version>${flexjson.version}</version>
+        </dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>${gson.version}</version>
+		</dependency>
+		
 		<!-- Web Resource Optimizer for Java -->
 		<dependency>
 			<groupId>ro.isdc.wro4j</groupId>
@@ -232,7 +244,7 @@
 		    <artifactId>json-path</artifactId>
 		    <version>${jsonpath.version}</version>
 		</dependency>
-		
+
 	</dependencies>
 	
 	

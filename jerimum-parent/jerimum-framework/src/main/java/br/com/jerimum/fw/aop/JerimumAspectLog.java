@@ -80,25 +80,21 @@ public class JerimumAspectLog {
         String methodName = JerimumAspectUtils.methodName(jp);
 
         Logger logger = JerimumAspectUtils.getLogger(jp);
-        LoggerUtils.logError(logger, "Exit <-- {} - NEW EXCEPTION [{}] {}", methodName, occurrenceId, ex.getMessage());
+        if (ex instanceof ValidationException) {
 
-        if (logger.isErrorEnabled()) {
-            if (ex instanceof JerimumException) {
-
-                JerimumException fex = (JerimumException) ex;
-                dumpException(fex, true, logger);
-
-            } else if (ex instanceof ValidationException) {
-
-                JerimumException fex = new JerimumException(ex.getMessage(), ex, new Date(), occurrenceId, methodName,
-                    jp.getThis(), jp.getArgs());
-                dumpException(fex, false, logger);
-
-            } else {
-
-                JerimumException fex = new JerimumException(ex.getMessage(), ex, new Date(), occurrenceId, methodName,
-                    jp.getThis(), jp.getArgs());
-                dumpException(fex, true, logger);
+            LoggerUtils.logDebug(logger, "Exit <-- {} - EXCEPTION {} - {}", methodName, ex.getClass().getName(), ex.getMessage());
+            
+        } else {
+            LoggerUtils.logError(logger, "Exit <-- {} - EXCEPTION [{}] {} - {}", methodName, ex.getClass().getName(), ex.getMessage());
+            if (logger.isErrorEnabled()) {
+                if (ex instanceof JerimumException) {
+                    JerimumException fex = (JerimumException) ex;
+                    dumpException(fex, true, logger);
+                }  else {
+                    JerimumException fex = new JerimumException(ex.getMessage(), ex, new Date(), occurrenceId, methodName,
+                        jp.getThis(), jp.getArgs());
+                    dumpException(fex, true, logger);
+                }
             }
         }
 

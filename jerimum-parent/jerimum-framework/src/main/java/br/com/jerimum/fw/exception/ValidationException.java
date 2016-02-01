@@ -29,11 +29,13 @@ public class ValidationException extends RuntimeException {
     public ValidationException(String message) {
         super(message);
         this.code = ReturnCode.SUCCESS.getCode();
+        this.listaErros.add(message);
     }
 
     public ValidationException(Integer code, String message) {
         super(message);
         this.code = code;
+        this.listaErros.add(message);
     }
 
     public ValidationException(Integer code, String message, List<String> listaErros) {

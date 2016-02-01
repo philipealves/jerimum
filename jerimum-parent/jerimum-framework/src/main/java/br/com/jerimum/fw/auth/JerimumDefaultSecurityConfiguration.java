@@ -11,12 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
@@ -34,6 +36,8 @@ public abstract class JerimumDefaultSecurityConfiguration extends WebSecurityCon
     public static final String XSRF_TOKEN = "XSRF-TOKEN";
 
     protected abstract void configureGlobal(AuthenticationManagerBuilder auth) throws Exception;
+    
+    protected abstract PasswordEncoder getPasswordEncoder();
 
     /**
      * Retorna uma string com o endereco relativo da pagina de login.
@@ -41,6 +45,13 @@ public abstract class JerimumDefaultSecurityConfiguration extends WebSecurityCon
      * @return {@link String}
      */
     protected abstract String getLoginPage();
+    
+    /**
+     * Retorna uma string com o endereco relativo da pagina de login.
+     * 
+     * @return {@link String}
+     */
+    protected abstract String getDefaultLoggedPage();
 
     /**
      * Retorna uma string com o endereco relativo da pagina de acesso negado.
@@ -66,33 +77,42 @@ public abstract class JerimumDefaultSecurityConfiguration extends WebSecurityCon
     protected abstract Map<String, String[]> getAuthorities();
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(getUnsecuredResources());
-    }
-
-    @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.httpBasic();
-
         if (StringUtils.isNoneBlank(getAccessDeniedPage())) {
-            http.exceptionHandling().accessDeniedPage(getAccessDeniedPage()).and().authorizeRequests()
-                .antMatchers(getAccessDeniedPage()).permitAll();
+            http
+                .exceptionHandling().accessDeniedPage(getAccessDeniedPage())
+                .and().authorizeRequests().antMatchers(getAccessDeniedPage()).permitAll();
         }
-
-        if (ArrayUtils.isNotEmpty(getUnsecuredResources())) {
-            http.authorizeRequests().antMatchers(getUnsecuredResources()).permitAll();
-        }
-
         Map<String, String[]> authorities = getAuthorities();
         if (MapUtils.isNotEmpty(authorities)) {
             for (String url : authorities.keySet()) {
                 http.authorizeRequests().antMatchers(url).hasAnyAuthority(authorities.get(url));
             }
         }
-
-        http.authorizeRequests().anyRequest().authenticated().and().formLogin().loginPage(getLoginPage()).permitAll()
-            .and().logout().permitAll().and().csrf().csrfTokenRepository(csrfTokenRepository()).and()
+        
+        http
+            .authorizeRequests()
+                .antMatchers(getUnsecuredResources()).permitAll()
+                .anyRequest().authenticated()
+                .and()
+            .formLogin()
+                .defaultSuccessUrl(getDefaultLoggedPage())
+                .loginProcessingUrl("/login")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .successHandler(ajaxAuthenticationSuccessHandler())
+                .loginPage(getLoginPage())
+                .permitAll()
+                .and()
+            .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl(getLoginPage())
+                .permitAll()
+                .and()
+            .csrf()
+                .csrfTokenRepository(csrfTokenRepository())
+                .and()
             .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
     }
 
@@ -120,6 +140,23 @@ public abstract class JerimumDefaultSecurityConfiguration extends WebSecurityCon
         HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
         repository.setHeaderName("X-" + XSRF_TOKEN);
         return repository;
+    }
+    
+    protected AuthenticationSuccessHandler ajaxAuthenticationSuccessHandler() {
+        return new AuthenticationSuccessHandler() {
+            
+            @Override
+            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                Authentication authentication) throws IOException, ServletException {
+                if (StringUtils.equalsIgnoreCase(Boolean.TRUE.toString(), request.getHeader("X-Login-Ajax-call"))) {
+                    response.getWriter().print("ok");
+                    response.getWriter().flush();
+                }
+                else {
+                    new SavedRequestAwareAuthenticationSuccessHandler().onAuthenticationSuccess(request, response, authentication);
+                }
+            }
+        };
     }
 
 }
