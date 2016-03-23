@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.jerimum.fw.dao.JpaCrudRepository;
@@ -64,6 +67,13 @@ public abstract class AbstractCrudService<DTO extends Serializable, ENTITY exten
     public Set<DTO> getAllDtos() {
         return buildDtoFromEntity(getAllEntities());
     }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public Page<DTO> getAllDtos(Pageable pageable) {
+        return buildDtoFromEntity(getAllEntities(pageable), pageable);
+    }
+
 
     /**
      * takes a DTO object and converts it to an entity.
@@ -93,6 +103,21 @@ public abstract class AbstractCrudService<DTO extends Serializable, ENTITY exten
             dtoList.add(buildDtoFromEntity(entity));
         }
         return dtoList;
+    }
+    
+    /**
+     * Converts an entities list into dto list.
+     * 
+     * @param entities The entity list to be converted.
+     * @param pageable The pageable used by the query.
+     * @return {@link Page} - The converted entity list.
+     */
+    protected Page<DTO> buildDtoFromEntity(Page<ENTITY> entities, Pageable pageable) {
+        List<DTO> dtoList = new ArrayList<DTO>();
+        for (ENTITY entity : entities) {
+            dtoList.add(buildDtoFromEntity(entity));
+        }
+        return new PageImpl<DTO>(dtoList, pageable, entities.getTotalElements());
     }
 
     /**

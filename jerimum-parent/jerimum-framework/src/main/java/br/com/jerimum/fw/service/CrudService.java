@@ -3,6 +3,9 @@ package br.com.jerimum.fw.service;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import br.com.jerimum.fw.entity.AbstractEntity;
 import br.com.jerimum.fw.exception.ValidationException;
 
@@ -23,5 +26,12 @@ public interface CrudService<DTO extends Serializable, ENTITY extends AbstractEn
     void deleteDtoById(Long id);
 
     Set<DTO> getAllDtos();
+    
+    /**
+     * Find all pageable 
+     * @param {@link Pageable}
+     * @return Page<ENTITY>
+     */
+    Page<DTO> getAllDtos(Pageable pageable);
 
 }
