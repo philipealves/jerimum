@@ -3,6 +3,8 @@ package br.com.jerimum.fw.json;
 import java.lang.reflect.Type;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.reflect.TypeToken;
 
 /**
@@ -44,6 +46,17 @@ public final class JSONUtils {
     public static <T> T deserialize(Type type, String jsonText) {
 
         return new Gson().fromJson(jsonText, type);
+    }
+    
+    public static <T> T deserialize(Type type, String jsonText, Class<?> instanceCreator) {
+
+        return new Gson().fromJson(jsonText, type);
+    }
+    
+    public static <T> T deserialize(TypeToken<T> typeToken, String jsonText, Class<?> deserializerType, JsonDeserializer<?> deserializer) {
+    	GsonBuilder gsonBuilder = new GsonBuilder();
+    	gsonBuilder.registerTypeAdapter(deserializerType, deserializer);
+    	return gsonBuilder.create().fromJson(jsonText, typeToken.getType());
     }
 
 }
