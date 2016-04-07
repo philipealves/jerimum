@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.jerimum.fw.dao.JpaCrudRepository;
 import br.com.jerimum.fw.entity.AbstractEntity;
+import br.com.jerimum.fw.exception.ServiceException;
 import br.com.jerimum.fw.exception.ValidationException;
 import br.com.jerimum.fw.service.CrudService;
 
@@ -42,7 +43,7 @@ public abstract class AbstractCrudService<DTO extends Serializable, ENTITY exten
 
     @Override
     @Transactional(readOnly = false)
-    public DTO insertDto(DTO dto) throws ValidationException {
+    public DTO insertDto(DTO dto) throws ValidationException, ServiceException {
         ENTITY entity = buildEntityFromDto(dto);
         saveEntity(entity);
         return buildDtoFromEntity(entity);
@@ -50,7 +51,7 @@ public abstract class AbstractCrudService<DTO extends Serializable, ENTITY exten
 
     @Override
     @Transactional(readOnly = false)
-    public DTO updateDto(DTO dto) throws ValidationException {
+    public DTO updateDto(DTO dto) throws ValidationException, ServiceException {
         ENTITY entity = buildEntityFromDto(dto);
         entity = saveEntity(entity);
         return buildDtoFromEntity(entity);
@@ -58,7 +59,7 @@ public abstract class AbstractCrudService<DTO extends Serializable, ENTITY exten
 
     @Override
     @Transactional(readOnly = false)
-    public void deleteDtoById(Long id) {
+    public void deleteDtoById(Long id) throws ValidationException, ServiceException {
         deleteEntityById(id);
     }
 

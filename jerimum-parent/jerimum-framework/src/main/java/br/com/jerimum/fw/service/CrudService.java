@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import br.com.jerimum.fw.entity.AbstractEntity;
+import br.com.jerimum.fw.exception.ServiceException;
 import br.com.jerimum.fw.exception.ValidationException;
 
 /**
@@ -19,11 +20,11 @@ public interface CrudService<DTO extends Serializable, ENTITY extends AbstractEn
 
     DTO getDtoById(Long id);
 
-    DTO insertDto(DTO dto) throws ValidationException;
+    DTO insertDto(DTO dto) throws ValidationException, ServiceException;
 
-    DTO updateDto(DTO dto) throws ValidationException;
+    DTO updateDto(DTO dto) throws ValidationException, ServiceException;
 
-    void deleteDtoById(Long id);
+    void deleteDtoById(Long id) throws ValidationException, ServiceException;
 
     Set<DTO> getAllDtos();
     
