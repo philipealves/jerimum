@@ -1,6 +1,7 @@
 package br.com.jerimum.fw.json;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -45,16 +46,13 @@ public final class JSONUtils {
 
     public static <T> T deserialize(Type type, String jsonText) {
 
-        return new Gson().fromJson(jsonText, type);
-    }
-    
-    public static <T> T deserialize(Type type, String jsonText, Class<?> instanceCreator) {
-
-        return new Gson().fromJson(jsonText, type);
+        Gson gson = new GsonBuilder().setDateFormat(DateFormat.FULL, DateFormat.FULL).create();
+        return gson.fromJson(jsonText, type);
     }
     
     public static <T> T deserialize(TypeToken<T> typeToken, String jsonText, Class<?> deserializerType, JsonDeserializer<?> deserializer) {
     	GsonBuilder gsonBuilder = new GsonBuilder();
+    	gsonBuilder.setDateFormat(DateFormat.FULL, DateFormat.FULL).create();
     	gsonBuilder.registerTypeAdapter(deserializerType, deserializer);
     	return gsonBuilder.create().fromJson(jsonText, typeToken.getType());
     }
