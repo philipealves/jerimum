@@ -24,11 +24,11 @@ public final class JSONUtils {
     }
 
     public static String serialize(Type type, Object object) {
-
+    	Gson gson = new GsonBuilder().setDateFormat(DateFormat.FULL, DateFormat.FULL).create();
         if (type == null) {
-            return new Gson().toJson(object);
+            return gson.toJson(object);
         }
-        return new Gson().toJson(object, type);
+        return gson.toJson(object, type);
     }
 
     public static <T> T deserialize(Class<T> returnType, String jsonText) {

@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.com.jerimum</groupId>
 	<artifactId>jerimum-parent</artifactId>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Jerimum Framework</name>
 	<description>Framework for Java application development.</description>
@@ -50,7 +50,7 @@
 	
 	<properties>
 	
-		<jerimum.version>1.0.4-SNAPSHOT</jerimum.version>
+		<jerimum.version>1.0.5-SNAPSHOT</jerimum.version>
 		
 		<!-- logback --> 
 		<logback.version>1.1.3</logback.version>
@@ -119,7 +119,7 @@
 		
 <!-- 		<ip.nexus>srvtfsbld2:8084</ip.nexus> -->
 		<ip.nexus>172.16.140.132:8081</ip.nexus>
-<!-- 		<ip.nexus>172.16.140.67:8081</ip.nexus> -->
+<!--		<ip.nexus>172.16.140.67:8081</ip.nexus> -->
 
 	</properties>
 	
