@@ -1,8 +1,11 @@
 package br.com.jerimum.fw.json;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.reflect.TypeToken;
 
 /**
@@ -21,11 +24,11 @@ public final class JSONUtils {
     }
 
     public static String serialize(Type type, Object object) {
-
+    	Gson gson = new GsonBuilder().setDateFormat(DateFormat.FULL, DateFormat.FULL).create();
         if (type == null) {
-            return new Gson().toJson(object);
+            return gson.toJson(object);
         }
-        return new Gson().toJson(object, type);
+        return gson.toJson(object, type);
     }
 
     public static <T> T deserialize(Class<T> returnType, String jsonText) {
@@ -43,7 +46,15 @@ public final class JSONUtils {
 
     public static <T> T deserialize(Type type, String jsonText) {
 
-        return new Gson().fromJson(jsonText, type);
+        Gson gson = new GsonBuilder().setDateFormat(DateFormat.FULL, DateFormat.FULL).create();
+        return gson.fromJson(jsonText, type);
+    }
+    
+    public static <T> T deserialize(TypeToken<T> typeToken, String jsonText, Class<?> deserializerType, JsonDeserializer<?> deserializer) {
+    	GsonBuilder gsonBuilder = new GsonBuilder();
+    	gsonBuilder.setDateFormat(DateFormat.FULL, DateFormat.FULL).create();
+    	gsonBuilder.registerTypeAdapter(deserializerType, deserializer);
+    	return gsonBuilder.create().fromJson(jsonText, typeToken.getType());
     }
 
 }

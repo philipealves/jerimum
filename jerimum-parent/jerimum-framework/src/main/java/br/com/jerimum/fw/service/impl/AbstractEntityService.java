@@ -11,6 +11,8 @@ import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Sets;
@@ -66,6 +68,12 @@ public abstract class AbstractEntityService<ENTITY extends AbstractEntity<?>> im
     @Transactional(readOnly = true)
     public Set<ENTITY> getAllEntities() {
         return Sets.newHashSet(getRepository().findAll());
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ENTITY> getAllEntities(Pageable pageable) {
+        return getRepository().findAll(pageable);
     }
 
     @SuppressWarnings("unchecked")

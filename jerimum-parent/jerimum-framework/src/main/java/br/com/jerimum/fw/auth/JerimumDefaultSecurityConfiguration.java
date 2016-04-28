@@ -12,11 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
@@ -102,6 +105,7 @@ public abstract class JerimumDefaultSecurityConfiguration extends WebSecurityCon
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .successHandler(ajaxAuthenticationSuccessHandler())
+                .failureHandler(authenticationFailureHandler())
                 .loginPage(getLoginPage())
                 .permitAll()
                 .and()
@@ -144,7 +148,6 @@ public abstract class JerimumDefaultSecurityConfiguration extends WebSecurityCon
     
     protected AuthenticationSuccessHandler ajaxAuthenticationSuccessHandler() {
         return new AuthenticationSuccessHandler() {
-            
             @Override
             public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                 Authentication authentication) throws IOException, ServletException {
@@ -155,6 +158,19 @@ public abstract class JerimumDefaultSecurityConfiguration extends WebSecurityCon
                 else {
                     new SavedRequestAwareAuthenticationSuccessHandler().onAuthenticationSuccess(request, response, authentication);
                 }
+            }
+        };
+    }
+    
+    protected AuthenticationFailureHandler authenticationFailureHandler() {
+        return new AuthenticationFailureHandler() {
+            @Override
+            public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+                AuthenticationException exception) throws IOException, ServletException {
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setCharacterEncoding("ISO-8859-1");
+                response.getOutputStream().println(String.format("{ \"error\": \"%s\" }", exception.getMessage()));             
             }
         };
     }
