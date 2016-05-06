@@ -19,7 +19,7 @@ public interface EntityService<ENTITY extends AbstractEntity<?>> {
 
     public ENTITY saveEntity(ENTITY entity) throws ValidationException;
 
-    public void deleteEntityById(Long id);
+    public ENTITY deleteEntityById(Long id);
 
     public Set<ENTITY> getAllEntities();
     

@@ -59,8 +59,9 @@ public abstract class AbstractCrudService<DTO extends Serializable, ENTITY exten
 
     @Override
     @Transactional(readOnly = false)
-    public void deleteDtoById(Long id) throws ValidationException, ServiceException {
-        deleteEntityById(id);
+    public DTO deleteDtoById(Long id) throws ValidationException, ServiceException {
+        ENTITY entity = deleteEntityById(id);
+        return buildDtoFromEntity(entity);
     }
 
     @Override

@@ -55,13 +55,14 @@ public abstract class AbstractEntityService<ENTITY extends AbstractEntity<?>> im
 
     @Override
     @Transactional(readOnly = false)
-    public void deleteEntityById(Long id) {
+    public ENTITY deleteEntityById(Long id) {
         ENTITY entity = getRepository().findOne(id);
         if (entity == null) {
             Class<ENTITY> clazz = getEntityClass();
             throwEmptyResultDataAccessException(clazz.getName(), id);
         }
         getRepository().delete(entity);
+        return entity;
     }
 
     @Override

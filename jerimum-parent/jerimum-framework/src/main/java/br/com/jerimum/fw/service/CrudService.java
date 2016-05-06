@@ -24,7 +24,7 @@ public interface CrudService<DTO extends Serializable, ENTITY extends AbstractEn
 
     DTO updateDto(DTO dto) throws ValidationException, ServiceException;
 
-    void deleteDtoById(Long id) throws ValidationException, ServiceException;
+    DTO deleteDtoById(Long id) throws ValidationException, ServiceException;
 
     Set<DTO> getAllDtos();
     
