@@ -45,7 +45,7 @@ public abstract class AbstractCrudService<DTO extends Serializable, ENTITY exten
     @Transactional(readOnly = false)
     public DTO insertDto(DTO dto) throws ValidationException, ServiceException {
         ENTITY entity = buildEntityFromDto(dto);
-        saveEntity(entity);
+        entity = saveEntity(entity);
         return buildDtoFromEntity(entity);
     }
 
