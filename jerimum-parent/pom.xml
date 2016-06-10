@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.com.jerimum</groupId>
 	<artifactId>jerimum-parent</artifactId>
-	<version>1.0.7-SNAPSHOT</version>
+	<version>1.0.8-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Jerimum Framework</name>
 	<description>Framework for Java application development.</description>
@@ -50,7 +50,7 @@
 	
 	<properties>
 	
-		<jerimum.version>1.0.7-SNAPSHOT</jerimum.version>
+		<jerimum.version>1.0.8-SNAPSHOT</jerimum.version>
 		
 		<!-- logback --> 
 		<logback.version>1.1.3</logback.version>

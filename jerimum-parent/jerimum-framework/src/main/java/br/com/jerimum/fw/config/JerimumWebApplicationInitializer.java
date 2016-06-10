@@ -1,5 +1,7 @@
 package br.com.jerimum.fw.config;
 
+import java.io.File;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
@@ -39,32 +41,34 @@ public abstract class JerimumWebApplicationInitializer extends AbstractAnnotatio
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
 
-        String jerimumEnvironmentPath = JerimumEnvironment.getEnvironment();
-        String logbackConfigurationFile = StringUtils.replace(jerimumEnvironmentPath, "application.properties",
-            "logback.xml");
-        if (!JerimumEnvironment.isExternalEnvironment(jerimumEnvironmentPath)) {
-            logbackConfigurationFile = getClass()
-                .getResource("/META-INF/environment/" + jerimumEnvironmentPath + "/logback.xml").getFile();
-            jerimumEnvironmentPath = "classpath:META-INF/environment/" + jerimumEnvironmentPath
-                + "/application.properties";
+        String jerimumEnvironmentPath = getEnvironmentPath();
+        boolean externalConfig = JerimumEnvironment.isExternalEnvironment(jerimumEnvironmentPath);
+        String logbackConfigurationFile = StringUtils.remove(jerimumEnvironmentPath, "/application.properties") + "/logback.xml";
+        logbackConfigurationFile = StringUtils.remove(logbackConfigurationFile, "file:");
+        if (!externalConfig) {
+            try {
+                logbackConfigurationFile = getClass().getResource("/META-INF/environment/" + jerimumEnvironmentPath + "/logback.xml").getFile();
+                jerimumEnvironmentPath = "classpath:META-INF/environment/" + jerimumEnvironmentPath + "/application.properties";
+            } catch (Exception e) {
+                System.err.println("###### Configuration files not found! -> " + jerimumEnvironmentPath + " ######");
+                throw e;
+            }
         }
-        String jerimumConfigurationFile = StringUtils.replace(logbackConfigurationFile, "logback.xml",
-            "application.properties");
+        String jerimumConfigurationFile = StringUtils.replace(logbackConfigurationFile, "logback.xml", "application.properties");
 
-        String jerimumEnvironmentName = JerimumEnvironment.getEnvironment();
-        System.setProperty("spring.config.location", jerimumEnvironmentPath);
+        System.setProperty("spring.config.location", externalConfig ? String.format("file:/%s", jerimumConfigurationFile) : jerimumEnvironmentPath);
         System.setProperty("logback.configurationFile", logbackConfigurationFile);
         System.setProperty("jerimum.configurationFile", jerimumConfigurationFile);
-        System.setProperty(AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME, jerimumEnvironmentName);
-        System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, jerimumEnvironmentName);
-
+        if (!externalConfig) {
+            System.setProperty(AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME, JerimumEnvironment.getEnvironment());
+            System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, JerimumEnvironment.getEnvironment());
+        }
 
         new LoggerConfigurator(logbackConfigurationFile).configure();
 
         LoggerUtils.logInfo(this.getClass(), "================================================================");
-        LoggerUtils.logInfo(this.getClass(), ".:  Starting Jerimum Application :.");
+        LoggerUtils.logInfo(this.getClass(), ".:  Starting Application :.");
         LoggerUtils.logInfo(this.getClass(), ".:  Application name: {} :.", servletContext.getServletContextName());
-        LoggerUtils.logInfo(this.getClass(), ".:  Environment: {} :.", jerimumEnvironmentName);
         LoggerUtils.logInfo(this.getClass(), ".:  Jerimum configuration file: {} :.", jerimumConfigurationFile);
         LoggerUtils.logInfo(this.getClass(), ".:  Logback configuration file: {} :.", logbackConfigurationFile);
 
@@ -78,6 +82,23 @@ public abstract class JerimumWebApplicationInitializer extends AbstractAnnotatio
 
     }
 
+    private String getEnvironmentPath() {
+
+        String applicationEnvironment = getEnvironmentJVMParam();
+        if (StringUtils.isNotBlank(applicationEnvironment)) {
+            String applicationEnvironmentValue = System.getProperty(applicationEnvironment, null);
+            if (StringUtils.isNotBlank(applicationEnvironmentValue)) {
+                applicationEnvironmentValue = StringUtils.replace(applicationEnvironmentValue, "\\", "/");
+                applicationEnvironmentValue = StringUtils.removeEnd(applicationEnvironmentValue, File.separator);
+                applicationEnvironmentValue = StringUtils.trimToNull(applicationEnvironmentValue);
+                return applicationEnvironmentValue;
+            }
+        }
+        return JerimumEnvironment.getEnvironment();
+    }
+
     public abstract Class<?> getConfigurationClass();
+
+    public abstract String getEnvironmentJVMParam();
 
 }
