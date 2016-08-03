@@ -36,10 +36,10 @@
 		<jerimum.version>1.0.0-SNAPSHOT</jerimum.version>
 		
 		<!-- angularjs/bootstrap -->
-		<jquery.version>2.2.0</jquery.version>
-		<jquery.ui.version>1.11.4</jquery.ui.version>
-		<angularjs.version>1.4.9</angularjs.version>
-		<bootstrap.version>3.3.6</bootstrap.version>
+		<angularjs.version>1.5.7</angularjs.version>
+		<angular.ui.router.version>0.2.18</angular.ui.router.version>
+		<angular.material.version>1.0.9</angular.material.version>
+		<angular.material.icons.version>0.7.0</angular.material.icons.version>
 		
   		<!-- spring -->
 		<spring.version>4.2.2.RELEASE</spring.version>
@@ -102,23 +102,26 @@
 				<dependencies>
 					<dependency>
 						<groupId>org.webjars</groupId>
-						<artifactId>jquery</artifactId>
-						<version>${symbol_dollar}{jquery.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.webjars</groupId>
-						<artifactId>jquery-ui</artifactId>
-						<version>${symbol_dollar}{jquery.ui.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.webjars</groupId>
 						<artifactId>angularjs</artifactId>
-						<version>${symbol_dollar}{angularjs.version}</version>
+						<version>${angularjs.version}</version>
 					</dependency>
+					
 					<dependency>
 						<groupId>org.webjars</groupId>
-						<artifactId>bootstrap</artifactId>
-						<version>${symbol_dollar}{bootstrap.version}</version>
+						<artifactId>angular-material</artifactId>
+						<version>${angular.material.version}</version>
+					</dependency>
+					
+					<dependency>
+						<groupId>org.webjars</groupId>
+						<artifactId>angular-ui-router</artifactId>
+						<version>${angular.ui.router.version}</version>
+					</dependency>
+					
+					<dependency>
+						<groupId>org.webjars.bower</groupId>
+						<artifactId>angular-material-icons</artifactId>
+						<version>${angular.material.icons.version}</version>
 					</dependency>
 				</dependencies>
 			</plugin>

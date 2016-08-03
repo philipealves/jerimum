@@ -1,0 +1,40 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<md-content class="md-padding">
+<form name="userForm">
+	<div layout layout-sm="column">
+		<md-input-container flex="80"> <label>Company
+			(Disabled)</label> <input ng-model="user.company" disabled> </md-input-container>
+
+		<md-datepicker ng-model="user.submissionDate"
+			md-placeholder="Submission Date"></md-datepicker>
+
+
+	</div>
+	<div layout layout-sm="column">
+		<md-input-container flex> <label>First
+			Name</label> <input ng-model="user.firstName" placeholder="Placeholder text">
+		</md-input-container>
+		<md-input-container flex> <label>Last
+			Name</label> <input ng-model="user.lastName"> </md-input-container>
+	</div>
+	<md-input-container flex> <label>Address</label> <input
+		ng-model="user.address"> </md-input-container>
+	<div layout layout-sm="column">
+		<md-input-container flex> <label>City</label> <input
+			ng-model="user.city"> </md-input-container>
+		<md-input-container flex> <label>State</label> <input
+			ng-model="user.state"> </md-input-container>
+		<md-input-container flex> <label>Postal
+			Code</label> <input ng-model="user.postalCode"> </md-input-container>
+	</div>
+	<md-input-container flex> <label>About us</label>
+	<textarea ng-model="user.biography" columns="1" md-maxlength="150"></textarea>
+	</md-input-container>
+	<div layout layout-sm="column" layout-align="end center">
+		<md-button class="md-raised"> Cancel </md-button>
+		<md-button class="md-raised md-primary"> Save </md-button>
+	</div>
+</form>
+</md-content>
