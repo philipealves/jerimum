@@ -33,7 +33,7 @@
 
 	<properties>
 	
-		<jerimum.version>1.0.0-SNAPSHOT</jerimum.version>
+		<jerimum.version>1.0.8-SNAPSHOT</jerimum.version>
 		
 		<!-- angularjs/bootstrap -->
 		<angularjs.version>1.5.7</angularjs.version>

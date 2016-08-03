@@ -46,7 +46,7 @@
 
 	<properties>
 	
-		<jerimum.version>1.0.0-SNAPSHOT</jerimum.version>
+		<jerimum.version>1.0.8-SNAPSHOT</jerimum.version>
 		
   		<!-- spring -->
 		<spring.version>4.2.2.RELEASE</spring.version>
