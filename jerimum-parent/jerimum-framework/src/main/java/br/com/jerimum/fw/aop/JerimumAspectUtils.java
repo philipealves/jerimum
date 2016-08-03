@@ -26,7 +26,7 @@ import br.com.jerimum.fw.logging.LoggerUtils;
 public abstract class JerimumAspectUtils {
 
     private static final int MAX_ARRAY_DISPLAY = 20;
-    private static final int MAX_LENGTH_STRING = 200;
+    private static final int MAX_LENGTH_STRING = 500;
 
     private JerimumAspectUtils() {
 
