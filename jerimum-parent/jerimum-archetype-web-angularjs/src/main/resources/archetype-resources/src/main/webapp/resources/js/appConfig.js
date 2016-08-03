@@ -50,11 +50,11 @@ app.config(function(${symbol_dollar}mdThemingProvider, ${symbol_dollar}stateProv
       })
 	 .state('home', {
         url: '/home',
-        templateUrl: 'pages/open/restricted/home.html',
+        templateUrl: 'pages/open/home.html',
       })
 	 .state('cadastro', {
         url: '/cadastro',
-        templateUrl: 'pages/open/restricted/cadastro.html',
+        templateUrl: 'pages/open/cadastro.html',
         controller: 'AppCtrl',
         data: {
           title: 'Cadastro Usuário',
@@ -62,7 +62,7 @@ app.config(function(${symbol_dollar}mdThemingProvider, ${symbol_dollar}stateProv
       })
       .state('consulta', {
         url: '/consulta',
-        templateUrl: 'pages/open/restricted/consulta.html',
+        templateUrl: 'pages/open/consulta.html',
         controller: 'AppCtrl',
         data: {
           title: 'Consulta',
