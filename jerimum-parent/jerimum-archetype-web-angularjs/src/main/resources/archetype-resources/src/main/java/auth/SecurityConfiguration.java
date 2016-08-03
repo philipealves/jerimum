@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 
 import br.com.jerimum.fw.auth.JerimumDefaultSecurityConfiguration;
 import ${package}.util.Constants;
+import java.util.Map;
 
 /**
  * Security configuration for the application.
@@ -33,5 +34,17 @@ public class SecurityConfiguration extends JerimumDefaultSecurityConfiguration {
     protected String[] getUnsecuredResources() {
         return new String[] { "/pages/open/**", "/resources/**", "/wro/**", "/" };
     }
+    
+    @Override
+	protected String getAccessDeniedPage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected Map<String, String[]> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
